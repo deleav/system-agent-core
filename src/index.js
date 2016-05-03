@@ -17,7 +17,7 @@ export default class systemAgentCore{
       let getOSSoftwareData = async () => {
         let cmd = '';
         if(this.OSTYPE === 'OSX') cmd = 'system_profiler SPSoftwareDataType';
-        if(this.OSTYPE === 'WINDOWS') cmd = '';
+        else return ''
         let result = await exec(cmd);
         return result.stdout;
       }
@@ -38,6 +38,8 @@ export default class systemAgentCore{
       let getSafariVersion = async () => {
         let cmd = '';
         if(this.OSTYPE === 'OSX') cmd = 'defaults read /Applications/Safari.app/Contents/version CFBundleShortVersionString';
+        else return ''
+
         let result = await exec(cmd);
         return result.stdout;
       }
@@ -45,6 +47,8 @@ export default class systemAgentCore{
       let getChromeVersion = async () => {
         let cmd = '';
         if(this.OSTYPE === 'OSX') cmd = '/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --version';
+        else return ''
+
         let result = await exec(cmd);
         return result.stdout;
       }
@@ -52,6 +56,9 @@ export default class systemAgentCore{
       let getFlashVersion = async () => {
         let cmd = '';
         if(this.OSTYPE === 'OSX') cmd = 'defaults read /Library/Internet\\ Plug-Ins/Flash\\ Player.plugin/Contents/version.plist CFBundleVersion';
+        if(this.OSTYPE === 'WINDOWS') cmd = 'REG QUERY HKLM\\Software\Macromedia\\flashplayer';
+        else return ''
+
         let result = await exec(cmd);
         return result.stdout;
       }
@@ -75,6 +82,8 @@ export default class systemAgentCore{
       let getNetworkSetup = async () => {
         let cmd = '';
         if(this.OSTYPE === 'OSX') cmd = 'networksetup -listallhardwareports';
+        else return ''
+
         let result = await exec(cmd);
         return result.stdout;
       }

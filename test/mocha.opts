@@ -1,4 +1,3 @@
 ./test/unit/**/*.test.js
 --reporter spec
 --recursive ./test/bootstrap.test.js
---require babel-core/register

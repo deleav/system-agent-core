@@ -1,7 +1,7 @@
 {
   "name": "system-agent-core",
   "description": "",
-  "version": "0.1.0",
+  "version": "0.0.2",
   "main": "lib/index.js",
   "author": "",
   "repository": "/system-agent-core",
@@ -14,9 +14,10 @@
   },
   "devDependencies": {
     "babel-cli": "*",
+    "babel-plugin-syntax-async-functions": "^6.8.0",
+    "babel-plugin-transform-regenerator": "^6.1.4",
     "babel-polyfill": "^6.8.0",
     "babel-preset-es2015": "*",
-    "babel-preset-stage-0": "*",
     "chai": "*",
     "coveralls": "*",
     "isparta": "*",

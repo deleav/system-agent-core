@@ -1,4 +1,5 @@
-import SystemAgentCore from '../../src/system-agent-core';
+
+import SystemAgentCore from '../../lib';
 
 describe('systemAgentCore', () => {
   describe('Greet function', () => {
@@ -10,7 +11,7 @@ describe('systemAgentCore', () => {
     it('should have always returned hello', () => {
 
       let result = systemAgentCore.greet();
-      expect(result).to.equals('hello');
+      result.should.be.equals('hello');
 
     });
 

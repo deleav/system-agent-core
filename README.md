@@ -1,9 +1,30 @@
 # system-agent-core
 
+![Build Status](https://img.shields.io/travis//system-agent-core.svg)
+![Coverage](https://img.shields.io/coveralls//system-agent-core.svg)
+![Downloads](https://img.shields.io/npm/dm/system-agent-core.svg)
+![Downloads](https://img.shields.io/npm/dt/system-agent-core.svg)
+![npm version](https://img.shields.io/npm/v/system-agent-core.svg)
+![dependencies](https://img.shields.io/david//system-agent-core.svg)
+![dev dependencies](https://img.shields.io/david/dev//system-agent-core.svg)
+![License](https://img.shields.io/npm/l/system-agent-core.svg)
 
 
-[![Travis build status](http://img.shields.io/travis//system-agent-core.svg?style=flat)](https://travis-ci.org//system-agent-core)
-[![Code Climate](https://codeclimate.com/github//system-agent-core/badges/gpa.svg)](https://codeclimate.com/github//system-agent-core)
-[![Test Coverage](https://codeclimate.com/github//system-agent-core/badges/coverage.svg)](https://codeclimate.com/github//system-agent-core)
-[![Dependency Status](https://david-dm.org//system-agent-core.svg)](https://david-dm.org//system-agent-core)
-[![devDependency Status](https://david-dm.org//system-agent-core/dev-status.svg)](https://david-dm.org//system-agent-core#info=devDependencies)
+
+## Getting Started
+
+Install it via npm:
+
+```shell
+npm install system-agent-core
+```
+
+And include in your project:
+
+```javascript
+import system-agent-core from 'system-agent-core';
+```
+
+## License
+
+MIT

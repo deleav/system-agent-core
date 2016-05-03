@@ -1,35 +1,56 @@
 
-import SystemAgentCore from '../../lib';
+import SystemAgentCore from '../../src';
 
 describe('systemAgentCore', () => {
-  describe('Greet function', () => {
-    let systemAgentCore = null;
-    beforeEach(() => {
-      systemAgentCore = new SystemAgentCore({ostype: 'OSX'});
-    });
 
-    it('should have always returned hello', () => {
-
-      let result = systemAgentCore.greet();
-      result.should.be.equals('hello');
-
-    });
-
-    it('should get OS info', async function(done) {
-
-      try {
-        let result = await systemAgentCore.getOSInfo();
-        console.log('=== result.stdout ===', result.stdout);
-
-        let findExpectString = result.stdout.indexOf('System Software Overview') >= 0;
-        findExpectString.should.be.true;
-
-        done();
-      } catch (e) {
-        done(e);
-      }
-
-    });
-
+  let systemAgentCore = null;
+  beforeEach(() => {
+    systemAgentCore = new SystemAgentCore({ostype: 'OSX'});
   });
+
+
+  it('should get OS info', async (done) => {
+
+    try {
+      let result = await systemAgentCore.getOSInfo();
+      result.should.has.keys('OSSoftwareData');
+
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
+  it('should get Browser info', async (done) => {
+
+    try {
+      let result = await systemAgentCore.getSoftwareInfo();
+
+      console.log(result);
+
+      result.should.has.keys('safari', 'chrome', 'flash');
+
+
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
+  it('should get Network info', async (done) => {
+
+    try {
+      let result = await systemAgentCore.getNetworkInfo();
+
+      console.log(result);
+
+      result.should.has.keys('networkSetup');
+
+
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
 });

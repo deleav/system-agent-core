@@ -56,7 +56,7 @@ export default class systemAgentCore{
       let getFlashVersion = async () => {
         let cmd = '';
         if(this.OSTYPE === 'OSX') cmd = 'defaults read /Library/Internet\\ Plug-Ins/Flash\\ Player.plugin/Contents/version.plist CFBundleVersion';
-        if(this.OSTYPE === 'WINDOWS') cmd = 'REG QUERY HKLM\\Software\Macromedia\\flashplayer';
+        if(this.OSTYPE === 'WINDOWS') cmd = 'REG QUERY HKEY_LOCAL_MACHINE\\Software\Macromedia\\flashplayer';
         else return ''
 
         let result = await exec(cmd);

@@ -1,8 +1,10 @@
 global.chai = require('chai');
 global.sinon = require('sinon');
 global.chai.use(require('sinon-chai'));
+global.chai.should();
 
 require('babel-core/register');
+require('babel-polyfill');
 require('./setup')();
 
 /*

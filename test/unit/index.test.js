@@ -1,7 +1,7 @@
 
 import SystemAgentCore from '../../src';
 
-describe.only('systemAgentCore use OSX', () => {
+describe('systemAgentCore use OSX', () => {
 
   let systemAgentCore = null;
   beforeEach(() => {
@@ -46,6 +46,18 @@ describe.only('systemAgentCore use OSX', () => {
 
       result.should.has.keys('networkSetup');
 
+
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
+  it.skip('call teamview', async (done) => {
+
+    try {
+      let teamviewPath = __dirname+'/../assets/osx/TeamViewerQS.app'
+      let result = await systemAgentCore.callTeamview({teamviewPath});
 
       done();
     } catch (e) {
@@ -105,4 +117,17 @@ describe('systemAgentCore use WINDOWS', () => {
       done(e);
     }
   });
+
+  it.skip('call teamview', async (done) => {
+
+    try {
+      let teamviewPath = __dirname+'//..//assets//windows//TeamViewerQS.exe'
+      let result = await systemAgentCore.callTeamview({teamviewPath});
+
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
 });

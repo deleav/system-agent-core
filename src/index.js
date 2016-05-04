@@ -98,4 +98,28 @@ export default class systemAgentCore{
     }
   }
 
+  async callTeamview({teamviewPath}) {
+    try {
+
+      console.log('=== this.OSTYPE ===', this.OSTYPE);
+      let cmd = '';
+      if(this.OSTYPE === 'OSX') cmd = `open -n ${teamviewPath} --args -AppCommandLineArg`;
+      else if(this.OSTYPE === 'WINDOWS') cmd = `${teamviewPath} --args -AppCommandLineArg`;
+      else return ''
+      console.log('=== cmd ===', cmd);
+      let execResult = await exec(cmd);
+
+      console.log('=== result ===', execResult);
+
+
+      let result = {
+        success: true
+      }
+
+      return result;
+    } catch (e) {
+      throw e;
+    }
+  }
+
 }

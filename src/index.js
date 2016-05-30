@@ -1,10 +1,9 @@
-import {exec} from 'child-process-promise';
-import * as softwareService from './software.js';
-import * as networkService from './network.js'
+import softwareService from './software';
+import networkService from './network';
 
-export default class systemAgentCore{
+export default class systemAgentCore {
 
-  constructor({ostype}) {
+  constructor({ ostype }) {
     // ostype: OSX, WINDOWS
     this.OSTYPE = ostype;
   }
@@ -14,18 +13,18 @@ export default class systemAgentCore{
   }
 
   async getOSInfo() {
-    return await softwareService.getOSInfo();
+    return await softwareService[this.OSTYPE].getOSInfo();
   }
 
   async getSoftwareInfo() {
-    return await softwareService.getSoftwareInfo();
+    return await softwareService[this.OSTYPE].getSoftwareInfo();
   }
 
   async getNetworkInfo() {
-    return await networkService.getNetworkInfo();
+    return await networkService[this.OSTYPE].getNetworkInfo();
   }
 
-  async callTeamview({teamviewPath}) {
-    return await softwareService.callTeamview();
+  async callTeamview({ teamviewPath }) {
+    return await softwareService[this.OSTYPE].callTeamview(teamviewPath);
   }
 }

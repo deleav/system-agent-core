@@ -14,18 +14,30 @@ export default class systemAgentCore{
   }
 
   async getOSInfo() {
+    if (this.OSTYPE === 'OSX') {
+    } else {
+    }
     return await softwareService.getOSInfo();
   }
 
   async getSoftwareInfo() {
+    if (this.OSTYPE === 'OSX') {
+    } else {
+    }
     return await softwareService.getSoftwareInfo();
   }
 
   async getNetworkInfo() {
+    if (this.OSTYPE === 'OSX') {
+    } else {
+    }
     return await networkService.getNetworkInfo();
   }
 
   async callTeamview({teamviewPath}) {
+    if (this.OSTYPE === 'OSX') {
+    } else {
+    }
     return await softwareService.callTeamview();
   }
 }

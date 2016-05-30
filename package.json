@@ -21,6 +21,8 @@
     "babel-preset-es2015": "*",
     "chai": "*",
     "coveralls": "*",
+    "eslint": "^2.11.0",
+    "eslint-config-airbnb": "^9.0.1",
     "isparta": "*",
     "mocha": "*",
     "sinon": "*"

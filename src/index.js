@@ -47,6 +47,11 @@ export default class systemAgentCore{
       let getChromeVersion = async () => {
         let cmd = '';
         if(this.OSTYPE === 'OSX') cmd = '/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --version';
+        if(this.OSTYPE === 'WINDOWS') else {
+          cmd = 'REG QUERY HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Google\\Update\\Clients';
+          // return string
+          // \r\nHKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Google\\Update\\Clients\\{430FD4D0-B729-4F61-AA34-91526481799D}\r\nHKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Google\\Update\\Clients\\{4DC8B4CA-1BDA-483e-B5FA-D3C12E15B62D}\r\nHKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Google\\Update\\Clients\\{8A69D345-D564-463c-AFF1-A69D9E530F96}\r\nHKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Google\\Update\\Clients\\{FDA71E6F-AC4C-4a00-8B70-9958A68906BF}\r\n'
+        }
         else return ''
 
         let result = await exec(cmd);

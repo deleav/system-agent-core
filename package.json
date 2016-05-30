@@ -21,6 +21,7 @@
     "babel-preset-es2015": "*",
     "chai": "*",
     "coveralls": "*",
+    "eslint": "^2.11.0",
     "isparta": "*",
     "mocha": "*",
     "sinon": "*"

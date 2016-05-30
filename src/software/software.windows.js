@@ -3,19 +3,12 @@ import { exec } from 'child-process-promise';
 
 export async function getOSInfo() {
   try {
-    console.log('=== this.OSTYPE ===', this.OSTYPE);
     const getOSSoftwareData = async () => {
       let cmd = '';
-      if (this.OSTYPE === 'OSX') {
-        cmd = 'system_profiler SPSoftwareDataType';
-      } else if (this.OSTYPE === 'WINDOWS') {
-        // only system ver
-        cmd = 'ver';
-        // system name & version
-        cmd = 'systeminfo | findstr /B /C:"OS Name" /C:"OS Version" /C:"作業系統名稱" /C:"作業系統版本"';
-      } else {
-        return '';
-      }
+      // only system ver
+      cmd = 'ver';
+      // system name & version
+      cmd = 'systeminfo | findstr /B /C:"OS Name" /C:"OS Version" /C:"作業系統名稱" /C:"作業系統版本"';
       const result = await exec(cmd);
       return result.stdout;
     };
@@ -56,9 +49,6 @@ export async function getSoftwareInfo() {
 
     const getFlashVersion = async () => {
       let cmd = '';
-      if (this.OSTYPE === 'OSX') {
-        cmd = 'defaults read /Library/Internet\\ Plug-Ins/Flash\\ Player.plugin/Contents/version.plist CFBundleVersion';
-      }
       if (this.OSTYPE === 'WINDOWS') {
         cmd = 'REG QUERY HKEY_LOCAL_MACHINE\\Software\\Macromedia\\flashplayer';
       } else {
@@ -85,11 +75,8 @@ export async function getSoftwareInfo() {
 
 export async function callTeamview({ teamviewPath }) {
     try {
-      console.log('=== this.OSTYPE ===', this.OSTYPE);
       let cmd = '';
-      if(this.OSTYPE === 'OSX') cmd = `open -n ${teamviewPath} --args -AppCommandLineArg`;
-      else if(this.OSTYPE === 'WINDOWS') cmd = `${teamviewPath} --args -AppCommandLineArg`;
-      else return ''
+      cmd = `${teamviewPath} --args -AppCommandLineArg`;
       console.log('=== cmd ===', cmd);
       let execResult = await exec(cmd);
 

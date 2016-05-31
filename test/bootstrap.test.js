@@ -1,2 +1,2 @@
-global.should = require("chai").should();
-global.sinon = require("sinon");
+global.should = require('chai').should();
+global.sinon = require('sinon');

@@ -1,3 +1,4 @@
+import hardwareService from './hardware';
 import softwareService from './software';
 import networkService from './network';
 
@@ -14,6 +15,10 @@ export default class systemAgentCore {
 
   async getOSInfo() {
     return await softwareService[this.OSTYPE].getOSInfo();
+  }
+
+  async getHardwareInfo() {
+    return await hardwareService[this.OSTYPE].getHardwareInfo();
   }
 
   async getSoftwareInfo() {

@@ -6,6 +6,7 @@ describe('systemAgentCore use OSX', () => {
   let systemAgentCore = null;
   beforeEach(() => {
     systemAgentCore = new SystemAgentCore({ostype: 'OSX'});
+
   });
 
 
@@ -14,7 +15,6 @@ describe('systemAgentCore use OSX', () => {
     try {
       let result = await systemAgentCore.getOSInfo();
       result.should.has.keys('OSSoftwareData');
-
       done();
     } catch (e) {
       done(e);

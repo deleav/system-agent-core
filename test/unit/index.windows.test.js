@@ -5,7 +5,7 @@ describe('systemAgentCore use Windows', () => {
 
   let systemAgentCore = null;
   beforeEach(() => {
-    systemAgentCore = new SystemAgentCore({ostype: 'Windows'});
+    systemAgentCore = new SystemAgentCore({ostype: 'WINDOWS'});
   });
 
 

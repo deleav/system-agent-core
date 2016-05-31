@@ -1,5 +1,11 @@
 import { exec } from 'child-process-promise';
 
+function formateSystemProfiler(str, key) {
+  const objRE = new RegExp(`${key}: (.*)\n`);
+  const match = str.match(objRE);
+  return match[1];
+}
+
 export async function getHardwareInfo() {
   try {
     const getCpuInfo = async () => {
@@ -8,15 +14,37 @@ export async function getHardwareInfo() {
       return result.stdout.replace('\n', '');
     };
 
-    const getDetailInfo = async () => {
+    const getModelInfo = async () => {
       const cmd = 'system_profiler SPHardwareDataType';
       const result = await exec(cmd);
-      return result.stdout;
+      // 識別碼對照型號 https://support.apple.com/zh-tw/HT201300
+      return formateSystemProfiler(result.stdout, 'Model Identifier');
+    };
+
+    const getRamlInfo = async () => {
+      const cmd = 'system_profiler SPMemoryDataType';
+      const result = await exec(cmd);
+      const objRE = new RegExp('Size: (.*)\n.*Type: (.*)\n.*Speed: (.*)\n.*Status: (.*)\n', 'g');
+      let match;
+      let matchArray = [];
+      while ((match = objRE.exec(result.stdout)) !== null) {
+        if (match.index === objRE.lastIndex) {
+          objRE.lastIndex++;
+        }
+        matchArray.push({
+          size: match[1],
+          type: match[2],
+          speed: match[3],
+          status: match[4],
+        });
+      }
+      return matchArray;
     };
 
     const result = {
+      model: await getModelInfo(),
       cup: await getCpuInfo(),
-      detail: await getDetailInfo(),
+      ram: await getRamlInfo(),
     };
 
     return result;
@@ -28,7 +56,7 @@ export async function getHardwareInfo() {
 export async function getHardwareFullInfo() {
   try {
     const getData = async () => {
-      const cmd = 'system_profiler -detailLevel basic';
+      const cmd = 'system_profiler -xml -detailLevel basic';
       const result = await exec(cmd);
       return result.stdout;
     };

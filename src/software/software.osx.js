@@ -58,21 +58,19 @@ export async function getSoftwareInfo() {
 
 
 export async function callTeamview({ teamviewPath }) {
-    try {
-      let cmd = '';
-      if(this.OSTYPE === 'OSX') cmd = `open -n ${teamviewPath} --args -AppCommandLineArg`;
-      console.log('=== cmd ===', cmd);
-      let execResult = await exec(cmd);
-
-      console.log('=== result ===', execResult);
-
-
-      let result = {
-        success: true
-      }
-
-      return result;
-    } catch (e) {
-      throw e;
+  try {
+    let cmd = '';
+    if (this.OSTYPE === 'OSX') {
+      cmd = `open -n ${teamviewPath} --args -AppCommandLineArg`;
     }
+    const execResult = await exec(cmd);
+
+    const result = {
+      success: true,
+    };
+
+    return result;
+  } catch (e) {
+    throw e;
   }
+}

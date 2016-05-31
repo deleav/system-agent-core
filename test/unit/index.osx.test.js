@@ -5,16 +5,15 @@ describe.only('systemAgentCore use OSX', () => {
 
   let systemAgentCore = null;
   beforeEach(() => {
-    systemAgentCore = new SystemAgentCore({ostype: 'OSX'});
+    systemAgentCore = new SystemAgentCore({ ostype: 'OSX' });
   });
 
 
   it('should get OS info', async (done) => {
 
     try {
-      let result = await systemAgentCore.getOSInfo();
+      const result = await systemAgentCore.getOSInfo();
       result.should.has.keys('OSSoftwareData');
-
       done();
     } catch (e) {
       done(e);
@@ -24,7 +23,7 @@ describe.only('systemAgentCore use OSX', () => {
   it('should get Browser info', async (done) => {
 
     try {
-      let result = await systemAgentCore.getSoftwareInfo();
+      const result = await systemAgentCore.getSoftwareInfo();
 
       console.log(result);
 
@@ -40,7 +39,7 @@ describe.only('systemAgentCore use OSX', () => {
   it('should get Network info', async (done) => {
     // this.timeout(10000);
     try {
-      let result ='aaa';// await systemAgentCore.getNetworkInfo();
+      const result = await systemAgentCore.getNetworkInfo();
 
       console.log('test',result);
 
@@ -56,9 +55,19 @@ describe.only('systemAgentCore use OSX', () => {
   it.skip('call teamview', async (done) => {
 
     try {
-      let teamviewPath = __dirname+'/../assets/osx/TeamViewerQS.app'
-      let result = await systemAgentCore.callTeamview({teamviewPath});
+      const teamviewPath = __dirname+'/../assets/osx/TeamViewerQS.app'
+      const result = await systemAgentCore.callTeamview({teamviewPath});
 
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
+  it.only('get osx hardware info', async (done) => {
+    try {
+      const result = await systemAgentCore.getHardwareInfo();
+      console.log(result);
       done();
     } catch (e) {
       done(e);

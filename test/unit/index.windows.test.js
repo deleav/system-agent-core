@@ -72,7 +72,7 @@ describe('systemAgentCore use Windows', () => {
     }
   });
 
-  it.only('get windows hardware info', async (done) => {
+  it('get windows hardware info', async (done) => {
     try {
       const result = await systemAgentCore.getHardwareInfo();
       console.log(result);

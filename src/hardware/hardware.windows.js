@@ -9,7 +9,7 @@ export async function getHardwareInfo() {
     };
 
     const result = {
-      cup: await getCpuInfo(),
+      cpu: await getCpuInfo(),
     };
 
     return result;

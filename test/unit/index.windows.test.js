@@ -1,11 +1,19 @@
-
+import os from 'os';
 import SystemAgentCore from '../../src';
 
-describe.skip('systemAgentCore use Windows', () => {
+describe('systemAgentCore use Windows', () => {
 
   let systemAgentCore = null;
-  beforeEach(() => {
+  before(function() {
+    // Windows_NT 是 node 上的 Windows 代號
+    if (os.type() !== 'Windows_NT') {
+      this.skip();
+    }
+  });
+
+  beforeEach(function() {
     systemAgentCore = new SystemAgentCore({ostype: 'WINDOWS'});
+    if (os.type() !== 'Windows_NT') this.skip();
   });
 
 

@@ -1,11 +1,22 @@
 
 import SystemAgentCore from '../../src';
+import os from 'os';
 
 describe('systemAgentCore use OSX', () => {
-
   let systemAgentCore = null;
-  beforeEach(() => {
-    systemAgentCore = new SystemAgentCore({ ostype: 'OSX' });
+  before(function() {
+    // Darwin 是 node 上的 OSX 代號
+    if (os.type() !== 'Darwin') {
+      this.skip();
+    }
+  });
+
+  beforeEach(function() {
+    try {
+      systemAgentCore = new SystemAgentCore({ ostype: 'OSX' });
+    } catch (e) {
+      console.log(e);
+    }
   });
 
 

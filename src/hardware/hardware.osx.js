@@ -41,10 +41,17 @@ export async function getHardwareInfo() {
       return matchArray;
     };
 
+    const getNetworkInfo = async () => {
+      const cmd = 'networksetup -listallhardwareports';
+      const result = await exec(cmd);
+      return '';
+    }
+
     const result = {
       model: await getModelInfo(),
       cup: await getCpuInfo(),
       ram: await getRamlInfo(),
+      network: await getNetworkInfo(),
     };
 
     return result;

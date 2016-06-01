@@ -4,18 +4,12 @@ import os from 'os';
 
 describe('systemAgentCore use OSX', () => {
   let systemAgentCore = null;
-  before(function() {
-    // Darwin 是 node 上的 OSX 代號
-    if (os.type() !== 'Darwin') {
-      this.skip();
-    }
-  });
-
   beforeEach(function() {
-    try {
+    if (os.type() === 'Darwin') {
+      // Darwin 是 node 上的 OSX 代號
       systemAgentCore = new SystemAgentCore({ ostype: 'OSX' });
-    } catch (e) {
-      console.log(e);
+    } else {
+      systemAgentCore = new SystemAgentCore({ ostype: 'WINDOWS' });
     }
   });
 

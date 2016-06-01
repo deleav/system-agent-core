@@ -1,6 +1,7 @@
 import { exec } from 'child-process-promise';
 import networkService from '../network';
 import format from '../util/format';
+import { wmic } from '../util/wmic';
 
 export async function getHardwareInfo() {
   try {
@@ -17,13 +18,14 @@ export async function getHardwareInfo() {
     };
 
     const getRamlInfo = async () => {
-      const getSizeCmd = 'wmic MEMORYCHIP get formfactor /VALUE';
-      const getSizeResult = await exec(getSizeCmd);
-      const sizeArray = format.formateWmicArray(getSizeResult.stdout, 'FormFactor');
-
-      const getSpeedCmd = 'wmic MEMORYCHIP get Speed /VALUE';
-      const getSpeedResult = await exec(getSpeedCmd);
-      const speedArray = format.formateWmicArray(getSpeedResult.stdout, 'Speed');
+      const tableName = 'MEMORYCHIP';
+      const [
+        sizeArray,
+        speedArray,
+      ] = await Promise.all([
+        wmic(tableName, 'FormFactor'),
+        wmic(tableName, 'Speed'),
+      ]);
 
       const result = sizeArray.map((info, i) => {
         return {

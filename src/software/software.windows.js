@@ -1,4 +1,3 @@
-
 import { exec } from 'child-process-promise';
 
 export async function getOSInfo() {

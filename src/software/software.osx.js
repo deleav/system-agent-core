@@ -30,17 +30,25 @@ export async function getSoftwareInfo() {
     };
 
     const getChromeVersion = async () => {
-      let cmd = '';
-      cmd = '/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --version';
-      const result = await exec(cmd);
-      return result.stdout;
+      try {
+        let cmd = '';
+        cmd = '/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --version';
+        const result = await exec(cmd);
+        return result.stdout;
+      } catch (e) {
+        return null;
+      }
     };
 
     const getFlashVersion = async () => {
-      let cmd = '';
-      cmd = 'defaults read /Library/Internet\\ Plug-Ins/Flash\\ Player.plugin/Contents/version.plist CFBundleVersion';
-      const result = await exec(cmd);
-      return result.stdout;
+      try {
+        let cmd = '';
+        cmd = 'defaults read /Library/Internet\\ Plug-Ins/Flash\\ Player.plugin/Contents/version.plist CFBundleVersion';
+        const result = await exec(cmd);
+        return result.stdout;
+      } catch (e) {
+        return null;
+      }
     };
 
 

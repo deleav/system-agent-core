@@ -2,7 +2,7 @@
 import SystemAgentCore from '../../src';
 import os from 'os';
 
-describe('systemAgentCore use OSX', () => {
+describe('systemAgentCore', () => {
   let systemAgentCore = null;
   beforeEach(function() {
     if (os.type() === 'Darwin') {
@@ -15,7 +15,6 @@ describe('systemAgentCore use OSX', () => {
 
 
   it('should get OS info', async (done) => {
-
     try {
       const result = await systemAgentCore.getOSInfo();
       result.should.has.keys('OSSoftwareData');
@@ -26,7 +25,6 @@ describe('systemAgentCore use OSX', () => {
   });
 
   it('should get Browser info', async (done) => {
-
     try {
       const result = await systemAgentCore.getSoftwareInfo();
 
@@ -42,7 +40,6 @@ describe('systemAgentCore use OSX', () => {
   });
 
   it('should get Network info', async (done) => {
-
     try {
       const result = await systemAgentCore.getNetworkInfo();
 
@@ -58,11 +55,10 @@ describe('systemAgentCore use OSX', () => {
   });
 
   it.skip('call teamview', async (done) => {
-
     try {
-      const teamviewPath = __dirname+'/../assets/osx/TeamViewerQS.app'
-      const result = await systemAgentCore.callTeamview({teamviewPath});
-
+      const teamviewPath = `${__dirname}/../assets/osx/TeamViewerQS.app`;
+      const result = await systemAgentCore.callTeamview({ teamviewPath });
+      result.success.should.be.equal(true);
       done();
     } catch (e) {
       done(e);

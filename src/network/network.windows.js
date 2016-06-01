@@ -1,11 +1,4 @@
-import { exec } from 'child-process-promise';
-import format from '../util/format';
-
-async function wmic(tableName, typeName) {
-  const cmd = `wmic ${tableName} get ${typeName} /VALUE`;
-  const result = await exec(cmd);
-  return format.formateWmicArray(result.stdout, typeName);
-}
+import { wmic } from '../util/wmic';
 
 export async function getNetworkHardwareInfo() {
   const tableName = 'NIC';

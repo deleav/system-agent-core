@@ -1,6 +1,5 @@
 import os from 'os';
 import SystemAgentCore from '../../src';
-
 describe('systemAgentCore use Windows', () => {
 
   let systemAgentCore = null;
@@ -67,6 +66,17 @@ describe('systemAgentCore use Windows', () => {
       let teamviewPath = __dirname+'/../assets/osx/TeamViewerQS.app'
       let result = await systemAgentCore.callTeamview({teamviewPath});
 
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
+  it.only('get windows hardware info', async (done) => {
+    try {
+      const result = await systemAgentCore.getHardwareInfo();
+      console.log(result);
+      result.should.has.keys('model', 'cpu', 'ram', 'network');
       done();
     } catch (e) {
       done(e);

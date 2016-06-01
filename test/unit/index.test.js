@@ -27,11 +27,8 @@ describe('systemAgentCore', () => {
   it('should get Browser info', async (done) => {
     try {
       const result = await systemAgentCore.getSoftwareInfo();
-
       console.log(result);
-
       result.should.has.keys('safari', 'chrome', 'flash');
-
 
       done();
     } catch (e) {

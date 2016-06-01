@@ -6,24 +6,24 @@ export async function getHardwareInfo() {
   try {
     const getCpuInfo = async () => {
       const cmd = 'wmic cpu get name';
-      let result = await exec(cmd);
+      const result = await exec(cmd);
       return format.formateWmic(result.stdout);
     };
 
     const getModelInfo = async () => {
       const cmd = 'wmic os get caption';
-      let result = await exec(cmd);
+      const result = await exec(cmd);
       return format.formateWmic(result.stdout);
     };
 
     const getRamlInfo = async () => {
       const getSizeCmd = 'wmic MEMORYCHIP get formfactor /VALUE';
       const getSizeResult = await exec(getSizeCmd);
-      const sizeArray =  format.formateWmicArray(getSizeResult.stdout, 'FormFactor');
+      const sizeArray = format.formateWmicArray(getSizeResult.stdout, 'FormFactor');
 
       const getSpeedCmd = 'wmic MEMORYCHIP get Speed /VALUE';
       const getSpeedResult = await exec(getSpeedCmd);
-      const speedArray =  format.formateWmicArray(getSpeedResult.stdout, 'Speed');
+      const speedArray = format.formateWmicArray(getSpeedResult.stdout, 'Speed');
 
       const result = sizeArray.map((info, i) => {
         return {
@@ -31,7 +31,7 @@ export async function getHardwareInfo() {
           type: null,
           speed: `${speedArray[i]} MHz`,
           status: 'OK',
-        }
+        };
       });
       return result;
     };

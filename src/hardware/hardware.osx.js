@@ -1,11 +1,6 @@
 import { exec } from 'child-process-promise';
 import networkService from '../network';
-
-function formateSystemProfiler(str, key) {
-  const objRE = new RegExp(`${key}: (.*)\n`);
-  const match = str.match(objRE);
-  return match[1];
-}
+import format from '../util/format';
 
 export async function getHardwareInfo() {
   try {
@@ -19,7 +14,7 @@ export async function getHardwareInfo() {
       const cmd = 'system_profiler SPHardwareDataType';
       const result = await exec(cmd);
       // 識別碼對照型號 https://support.apple.com/zh-tw/HT201300
-      return formateSystemProfiler(result.stdout, 'Model Identifier');
+      return format.formateSystemProfiler(result.stdout, 'Model Identifier');
     };
 
     const getRamlInfo = async () => {

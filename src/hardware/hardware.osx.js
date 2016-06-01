@@ -1,4 +1,5 @@
 import { exec } from 'child-process-promise';
+import networkService from '../network';
 
 function formateSystemProfiler(str, key) {
   const objRE = new RegExp(`${key}: (.*)\n`);
@@ -41,17 +42,12 @@ export async function getHardwareInfo() {
       return matchArray;
     };
 
-    const getNetworkInfo = async () => {
-      const cmd = 'networksetup -listallhardwareports';
-      const result = await exec(cmd);
-      return '';
-    }
 
     const result = {
       model: await getModelInfo(),
-      cup: await getCpuInfo(),
+      cpu: await getCpuInfo(),
       ram: await getRamlInfo(),
-      network: await getNetworkInfo(),
+      network: await networkService.OSX.getNetworkHardwareInfo(),
     };
 
     return result;

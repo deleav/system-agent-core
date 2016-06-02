@@ -1,6 +1,6 @@
-import * as ftp from './ftp';
+import ftp from './ftp';
 
-const config = {
+const uploads = {
   host: ftp.host,
   user: ftp.user,
   pwd: ftp.pwd,
@@ -8,4 +8,4 @@ const config = {
   dest: 'uploads/test10MB',
 };
 
-export default config;
+export default uploads;

@@ -1,7 +1,8 @@
 import ping from 'net-ping';
 import Client from 'ftp';
-import { ulConfig, dlConfig } from '../config';
+import config from '../config';
 
+const { ulConfig, dlConfig } = config;
 const session = ping.createSession();
 const client = new Client();
 
@@ -56,7 +57,6 @@ export async function getUploadSpeed() {
 
 export async function getDownloadSpeed() {
   try {
-    console.log("!!!!!",ulConfig);
     client.connect({
       host: dlConfig.host,
       user: dlConfig.user,

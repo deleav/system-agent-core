@@ -1,10 +1,10 @@
-import * as ftp from './ftp';
+import ftp from './ftp';
 
-const config = {
+const downloads = {
   host: ftp.host,
   user: ftp.user,
   pwd: ftp.pwd,
   target: 'downloads/test10MB',
 };
 
-export default config;
+export default downloads;

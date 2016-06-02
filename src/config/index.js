@@ -1,5 +1,5 @@
-import * as uploads from './ftp.uploads.js';
-import * as downloads from './ftp.downloads.js';
+import uploads from './ftp.uploads';
+import downloads from './ftp.downloads';
 
 export default {
   ulConfig: uploads,

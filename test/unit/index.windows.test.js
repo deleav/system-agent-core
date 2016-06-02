@@ -38,19 +38,16 @@ describe.skip('systemAgentCore use Windows', () => {
   });
 
   it('should get Network info', async (done) => {
-
-    try {
-      let result = await systemAgentCore.getNetworkInfo();
-
+    systemAgentCore.getNetworkInfo('172.217.25.99', (result) => {
       console.log(result);
 
-      result.should.has.keys('networkSetup');
-
-
-      done();
-    } catch (e) {
-      done(e);
-    }
+      try {
+        result.should.has.keys('networkSetup');
+        done();
+      } catch (e) {
+        done(e);
+      }
+    });
   });
 
   it.skip('call teamview', async (done) => {

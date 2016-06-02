@@ -1,4 +1,3 @@
-
 import SystemAgentCore from '../../src';
 
 describe('systemAgentCore use OSX', () => {
@@ -8,12 +7,11 @@ describe('systemAgentCore use OSX', () => {
     systemAgentCore = new SystemAgentCore({ ostype: 'OSX' });
   });
 
-
   it('should get OS info', async (done) => {
-
     try {
       const result = await systemAgentCore.getOSInfo();
       result.should.has.keys('OSSoftwareData');
+
       done();
     } catch (e) {
       done(e);
@@ -21,14 +19,10 @@ describe('systemAgentCore use OSX', () => {
   });
 
   it('should get Browser info', async (done) => {
-
     try {
       const result = await systemAgentCore.getSoftwareInfo();
-
       console.log(result);
-
       result.should.has.keys('safari', 'chrome', 'flash');
-
 
       done();
     } catch (e) {
@@ -36,24 +30,20 @@ describe('systemAgentCore use OSX', () => {
     }
   });
 
-  it('should get Network info', async (done) => {
-
-    try {
-      const result = await systemAgentCore.getNetworkInfo();
-
+  it.only('should get Network info', (done) => {
+    systemAgentCore.getNetworkInfo('172.217.25.99', (result) => {
       console.log(result);
 
-      result.should.has.keys('networkSetup');
-
-
-      done();
-    } catch (e) {
-      done(e);
-    }
+      try {
+        result.should.has.keys('networkSetup');
+        done();
+      } catch (e) {
+        done(e);
+      }
+    });
   });
 
   it.skip('call teamview', async (done) => {
-
     try {
       const teamviewPath = __dirname+'/../assets/osx/TeamViewerQS.app'
       const result = await systemAgentCore.callTeamview({teamviewPath});
@@ -64,7 +54,7 @@ describe('systemAgentCore use OSX', () => {
     }
   });
 
-  it.only('get osx hardware info', async (done) => {
+  it('get osx hardware info', async (done) => {
     try {
       const result = await systemAgentCore.getHardwareInfo();
       console.log(result);

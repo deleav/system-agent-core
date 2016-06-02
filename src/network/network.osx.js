@@ -1,21 +1,18 @@
-export async function getNetworkInfo() {
-  try {
+import ping from 'net-ping';
+const session = ping.createSession();
 
-    let getNetworkSetup = async () => {
-      let cmd = '';
-      if(this.OSTYPE === 'OSX') cmd = 'networksetup -listallhardwareports';
-      else return ''
+export function getNetworkInfo(host, cb) {
+  session.pingHost(host, (error, target, sent, rcvd) => {
+    const ms = rcvd - sent;
 
-      let result = await exec(cmd);
-      return result.stdout;
+    if (error) {
+      cb({
+        ping: error.toString(),
+      });
+    } else {
+      cb({
+        ping: ms,
+      });
     }
-
-    let result = {
-      networkSetup: await getNetworkSetup()
-    }
-
-    return result;
-  } catch (e) {
-    throw e;
-  }
+  });
 }

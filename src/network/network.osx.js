@@ -1,14 +1,13 @@
-import ping from 'net-ping';
-const session = ping.createSession();
+import * as lib from './network';
 
 export function getPingByRemoteHost(host, cb) {
-  session.pingHost(host, (error, target, sent, rcvd) => {
-    const ms = rcvd - sent;
+  lib.getPingByRemoteHost(host, cb);
+}
 
-    if (error) {
-      cb(error.toString());
-    } else {
-      cb(ms);
-    }
-  });
+export async function getUploadSpeed() {
+  return lib.getUploadSpeed();
+}
+
+export async function getDownloadSpeed() {
+  return lib.getDownloadSpeed();
 }

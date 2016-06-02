@@ -1,7 +1,7 @@
 import { exec } from 'child-process-promise';
 import networkService from '../network';
 import format from '../util/format';
-import { wmic } from '../util/wmic';
+import { wmicArray } from '../util/wmic';
 
 export async function getHardwareInfo() {
   try {
@@ -23,8 +23,8 @@ export async function getHardwareInfo() {
         sizeArray,
         speedArray,
       ] = await Promise.all([
-        wmic(tableName, 'FormFactor'),
-        wmic(tableName, 'Speed'),
+        wmicArray(tableName, 'FormFactor'),
+        wmicArray(tableName, 'Speed'),
       ]);
 
       const result = sizeArray.map((info, i) => {

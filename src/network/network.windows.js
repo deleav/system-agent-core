@@ -1,4 +1,4 @@
-import { wmic } from '../util/wmic';
+import { wmicArray } from '../util/wmic';
 
 export async function getNetworkHardwareInfo() {
   const tableName = 'NIC';
@@ -8,10 +8,10 @@ export async function getNetworkHardwareInfo() {
     macAddressArray,
     netEnabledArray,
   ] = await Promise.all([
-    wmic(tableName, 'Name'),
-    wmic(tableName, 'AdapterType'),
-    wmic(tableName, 'MACAddress'),
-    wmic(tableName, 'NetEnabled'),
+    wmicArray(tableName, 'Name'),
+    wmicArray(tableName, 'AdapterType'),
+    wmicArray(tableName, 'MACAddress'),
+    wmicArray(tableName, 'NetEnabled'),
   ]);
 
   const result = nameArray.map((info, i) => {

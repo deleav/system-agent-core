@@ -1,28 +1,20 @@
-import ping from 'net-ping';
-const session = ping.createSession();
+import { exec } from 'child-process-promise';
 
 export async function getNetworkInfo() {
   try {
     const getNetworkSetup = async () => {
-      const target = '172.217.25.99';
+      const cmd = 'node_modules/speed-test/cli.js --json';
+      const result = await exec(cmd);
 
-      const result = new Promise((done) => {
-        session.pingHost(target, function(error, target, sent, rcvd) {
-          const ms = rcvd - sent;
-
-          if (error) {
-            done(`target: ${error.toString()}`);
-          } else {
-            done(`target: Alive (ms = ${ms})`);
-          }
-        });
-      });
-      console.log('getNetworkSetup', result);
-      return result;
+      return result.stdout;
     };
 
+    const info = await getNetworkSetup();
+
     const result = {
-      networkSetup: await getNetworkSetup(),
+      ping: info.ping,
+      download: info.download,
+      upload: info.upload,
     };
 
     return result;

@@ -30,7 +30,6 @@ describe.skip('systemAgentCore use Windows', () => {
 
       result.should.has.keys('safari', 'chrome', 'flash');
 
-
       done();
     } catch (e) {
       done(e);
@@ -44,8 +43,9 @@ describe.skip('systemAgentCore use Windows', () => {
 
       console.log(result);
 
-      result.should.has.keys('networkSetup');
-
+      result.should.has.keys('ping');
+      result.should.has.keys('download');
+      result.should.has.keys('upload');
 
       done();
     } catch (e) {

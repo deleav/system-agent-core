@@ -1,4 +1,3 @@
-
 import SystemAgentCore from '../../src';
 
 describe.only('systemAgentCore use OSX', () => {
@@ -41,10 +40,11 @@ describe.only('systemAgentCore use OSX', () => {
     try {
       const result = await systemAgentCore.getNetworkInfo();
 
-      console.log('test',result);
+      console.log(result);
 
-      result.should.has.keys('networkSetup');
-
+      result.should.has.keys('ping');
+      result.should.has.keys('download');
+      result.should.has.keys('upload');
 
       done();
     } catch (e) {
@@ -68,6 +68,7 @@ describe.only('systemAgentCore use OSX', () => {
     try {
       const result = await systemAgentCore.getHardwareInfo();
       console.log(result);
+
       done();
     } catch (e) {
       done(e);

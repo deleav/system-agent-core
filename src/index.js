@@ -33,6 +33,14 @@ export default class systemAgentCore {
     return networkService[this.OSTYPE].getPingByRemoteHost(host, cb);
   }
 
+  async getUploadSpeed() {
+    return networkService[this.OSTYPE].getUploadSpeed();
+  }
+
+  async getDownloadSpeed() {
+    return networkService[this.OSTYPE].getDownloadSpeed();
+  }
+
   async callTeamview({ teamviewPath }) {
     return await softwareService[this.OSTYPE].callTeamview(teamviewPath);
   }

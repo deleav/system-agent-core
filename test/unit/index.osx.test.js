@@ -1,6 +1,6 @@
 
 import SystemAgentCore from '../../src';
-import * as network from '../../src/network/network.osx.js';
+
 
 describe.only('systemAgentCore use OSX', () => {
 
@@ -37,23 +37,24 @@ describe.only('systemAgentCore use OSX', () => {
     }
   });
 
-  it.only('should get Network info', async (done) => {
+  it.only('should get Network info', (done) => {
     // this.timeout(10000);
-    try {
-      console.log('=== network ===', network);
-      const result = network.getNetworkInfo((result) => {
-        console.log('test',result);
 
-        result.should.has.keys('networkSetup');
+      const result = systemAgentCore.getNetworkInfo((result) => {
+        console.log('test',result);
+        try {
+          result.should.has.keys('networkSetup');
+          done();
+
+        } catch (e) {
+          done(e);
+        }
       });
 
 
 
 
-      done();
-    } catch (e) {
-      done(e);
-    }
+
   });
 
   it.skip('call teamview', async (done) => {

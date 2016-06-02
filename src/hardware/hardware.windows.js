@@ -1,4 +1,5 @@
 import { exec } from 'child-process-promise';
+import * as lib from './hardware';
 
 export async function getHardwareInfo() {
   try {
@@ -8,21 +9,9 @@ export async function getHardwareInfo() {
       return result.stdout;
     };
 
-    const getCpuBenchmark = async () => {
-      const starTime = Math.floor(new Date().getTime() / 1000);
-      let score = 0;
-      let shouldLoop = true;
-      while (shouldLoop) {
-        const nowTime = Math.floor(new Date().getTime() / 1000);
-        score += 0.001;
-        if (nowTime >= starTime + 10) shouldLoop = false;
-      }
-      return score;
-    };
-
     const result = {
       cpu: await getCpuInfo(),
-      cpuBenchmark: await getCpuBenchmark(),
+      cpuBenchmark: await lib.getCpuBenchmark(),
     };
 
     return result;

@@ -30,12 +30,11 @@ describe('systemAgentCore use OSX', () => {
     }
   });
 
-  it.only('should get Network info', (done) => {
-    systemAgentCore.getNetworkInfo('172.217.25.99', (result) => {
-      console.log(result);
+  it.only('should get Ping', (done) => {
+    systemAgentCore.getPingByRemoteHost('172.217.25.99', (result) => {
+      console.log(`ping: ${result}`);
 
       try {
-        result.should.has.keys('networkSetup');
         done();
       } catch (e) {
         done(e);

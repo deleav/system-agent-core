@@ -30,7 +30,7 @@ describe('systemAgentCore use OSX', () => {
     }
   });
 
-  it.only('should get Ping', (done) => {
+  it('should get Ping', (done) => {
     systemAgentCore.getPingByRemoteHost('172.217.25.99', (result) => {
       console.log(`ping: ${result}`);
 
@@ -40,6 +40,28 @@ describe('systemAgentCore use OSX', () => {
         done(e);
       }
     });
+  });
+
+  it.only('should get upload speed', async (done) => {
+    try {
+      const result = await systemAgentCore.getUploadSpeed();
+      console.log(`upload speed: ${result} Kbps`);
+
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
+  it('should get download speed', async (done) => {
+    try {
+      const result = await systemAgentCore.getDownloadSpeed();
+      console.log(`download speed: ${result} Kbps`);
+
+      done();
+    } catch (e) {
+      done(e);
+    }
   });
 
   it.skip('call teamview', async (done) => {
@@ -57,6 +79,7 @@ describe('systemAgentCore use OSX', () => {
     try {
       const result = await systemAgentCore.getHardwareInfo();
       console.log(result);
+
       done();
     } catch (e) {
       done(e);

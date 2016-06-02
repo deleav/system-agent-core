@@ -29,7 +29,7 @@ describe('systemAgentCore use Windows', () => {
     }
   });
 
-  it('should get Network info', async (done) => {
+  it('should get Ping', (done) => {
     systemAgentCore.getPingByRemoteHost('172.217.25.99', (result) => {
       console.log(`ping: ${result}`);
 
@@ -39,6 +39,28 @@ describe('systemAgentCore use Windows', () => {
         done(e);
       }
     });
+  });
+
+  it('should get upload speed', async (done) => {
+    try {
+      const result = await systemAgentCore.getUploadSpeed();
+      console.log(`upload speed: ${result} Kbps`);
+
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
+  it.only('should get download speed', async (done) => {
+    try {
+      const result = await systemAgentCore.getDownloadSpeed();
+      console.log(`download speed: ${result} Kbps`);
+
+      done();
+    } catch (e) {
+      done(e);
+    }
   });
 
   it.skip('call teamview', async (done) => {

@@ -1,31 +1,30 @@
 import ping from 'net-ping';
 const session = ping.createSession();
 
-export async function getNetworkInfo() {
+export function getNetworkInfo(cb) {
   try {
-    const getNetworkSetup = async () => {
-      const target = '172.217.25.99';
+    const target = '172.217.25.99';
 
-      const result = new Promise((done) => {
-        session.pingHost(target, function(error, target, sent, rcvd) {
-          const ms = rcvd - sent;
+    const result = new Promise((resolve,reject) => {
+      session.pingHost(target, function(error, target, sent, rcvd) {
+        const ms = rcvd - sent;
 
-          if (error) {
-            done(`target: ${error.toString()}`);
-          } else {
-            done(`target: Alive (ms = ${ms})`);
-          }
-        });
+        if (error) {
+          reject(`target: ${error.toString()}`);
+        } else {
+          resolve(`target: Alive (ms = ${ms})`);
+        }
       });
-      console.log('getNetworkSetup', result);
-      return result;
-    };
+    });
 
-    const result = {
-      networkSetup: await getNetworkSetup(),
-    };
 
-    return result;
+    result.then((that) => {
+
+      cb({
+        networkSetup: that,
+      })
+
+    })
   } catch (e) {
     throw e;
   }

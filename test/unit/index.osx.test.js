@@ -1,5 +1,6 @@
 
 import SystemAgentCore from '../../src';
+import * as network from '../../src/network/network.osx.js';
 
 describe.only('systemAgentCore use OSX', () => {
 
@@ -36,14 +37,17 @@ describe.only('systemAgentCore use OSX', () => {
     }
   });
 
-  it('should get Network info', async (done) => {
+  it.only('should get Network info', async (done) => {
     // this.timeout(10000);
     try {
-      const result = await systemAgentCore.getNetworkInfo();
+      console.log('=== network ===', network);
+      const result = network.getNetworkInfo((result) => {
+        console.log('test',result);
 
-      console.log('test',result);
+        result.should.has.keys('networkSetup');
+      });
 
-      result.should.has.keys('networkSetup');
+
 
 
       done();
@@ -64,7 +68,7 @@ describe.only('systemAgentCore use OSX', () => {
     }
   });
 
-  it.only('get osx hardware info', async (done) => {
+  it('get osx hardware info', async (done) => {
     try {
       const result = await systemAgentCore.getHardwareInfo();
       console.log(result);

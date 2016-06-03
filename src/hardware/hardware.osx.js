@@ -1,6 +1,8 @@
 import { exec } from 'child-process-promise';
 import networkService from '../network';
 import format from '../util/format';
+import * as lib from './hardware';
+console.log(lib);
 
 export async function getHardwareInfo() {
   try {
@@ -41,6 +43,7 @@ export async function getHardwareInfo() {
     const result = {
       model: await getModelInfo(),
       cpu: await getCpuInfo(),
+      cpuBenchmark: await lib.getCpuBenchmark(),
       ram: await getRamlInfo(),
       network: await networkService.OSX.getNetworkHardwareInfo(),
     };

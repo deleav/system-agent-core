@@ -2,3 +2,4 @@
 --reporter spec
 --recursive ./test/bootstrap.test.js
 --require babel-core/register
+--timeout 60000

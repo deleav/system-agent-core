@@ -2,6 +2,7 @@ import { exec } from 'child-process-promise';
 import networkService from '../network';
 import format from '../util/format';
 import { wmicArray } from '../util/wmic';
+import * as lib from './hardware';
 
 export async function getHardwareInfo() {
   try {
@@ -41,6 +42,7 @@ export async function getHardwareInfo() {
     const result = {
       model: await getModelInfo(),
       cpu: await getCpuInfo(),
+      cpuBenchmark: await lib.getCpuBenchmark(),
       ram: await getRamlInfo(),
       network: await networkService.WINDOWS.getNetworkHardwareInfo(),
     };

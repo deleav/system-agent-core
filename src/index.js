@@ -26,7 +26,19 @@ export default class systemAgentCore {
   }
 
   async getNetworkInfo() {
-    return await networkService[this.OSTYPE].getNetworkInfo();
+    return networkService[this.OSTYPE].getNetworkInfo();
+  }
+
+  getPingByRemoteHost(host, cb) {
+    return networkService[this.OSTYPE].getPingByRemoteHost(host, cb);
+  }
+
+  async getUploadSpeed() {
+    return networkService[this.OSTYPE].getUploadSpeed();
+  }
+
+  async getDownloadSpeed() {
+    return networkService[this.OSTYPE].getDownloadSpeed();
   }
 
   async callTeamview({ teamviewPath }) {

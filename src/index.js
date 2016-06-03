@@ -41,6 +41,10 @@ export default class systemAgentCore {
     return networkService[this.OSTYPE].getDownloadSpeed();
   }
 
+  traceRoute(host, ttlOrOptions, cb) {
+    return networkService[this.OSTYPE].traceRoute(host, ttlOrOptions, cb);
+  }
+
   async callTeamview({ teamviewPath }) {
     return await softwareService[this.OSTYPE].callTeamview(teamviewPath);
   }

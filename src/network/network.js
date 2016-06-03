@@ -94,3 +94,25 @@ export async function getDownloadSpeed() {
     throw e;
   }
 }
+
+export function traceRoute(host, ttlOrOptions, cb) {
+  const session = ping.createSession();
+  const traceArr = [];
+  session.traceRoute(host, ttlOrOptions, (error, target, ttl, sent, rcvd) => {
+    const ms = rcvd - sent;
+    if (error) {
+      if (error instanceof ping.TimeExceededError) {
+        traceArr.push(`${target} : ${error.source} (ttl=${ttl} ms=${ms})`);
+      } else {
+        traceArr.push(`${target} : ${error.toString()} (ttl=${ttl} ms=${ms})`);
+      }
+    } else {
+      traceArr.push(`${target} : ${target} (ttl=${ttl} ms=${ms})`);
+    }
+  }, (error, target) => {
+    if (error) {
+      traceArr.push(`${target} : ${error.toString()}`);
+    }
+    cb(traceArr);
+  });
+}

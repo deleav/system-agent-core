@@ -63,6 +63,18 @@ describe('systemAgentCore use Windows', () => {
     }
   });
 
+  it.only('should trace route', (done) => {
+    systemAgentCore.traceRoute('172.217.25.99', 30, (result) => {
+      console.log(`done trace route: ${result}`);
+
+      try {
+        done();
+      } catch (e) {
+        done(e);
+      }
+    });
+  });
+
   it.skip('call teamview', async (done) => {
     try {
       let teamviewPath = __dirname+'/../assets/osx/TeamViewerQS.app'

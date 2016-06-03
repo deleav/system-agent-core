@@ -1,10 +1,15 @@
 import SystemAgentCore from '../../src';
+import os from 'os';
 
-describe('systemAgentCore use OSX', () => {
-
+describe('systemAgentCore', () => {
   let systemAgentCore = null;
-  beforeEach(() => {
-    systemAgentCore = new SystemAgentCore({ ostype: 'OSX' });
+  beforeEach(function() {
+    if (os.type() === 'Darwin') {
+      // Darwin 是 node 上的 OSX 代號
+      systemAgentCore = new SystemAgentCore({ ostype: 'OSX' });
+    } else {
+      systemAgentCore = new SystemAgentCore({ ostype: 'WINDOWS' });
+    }
   });
 
   it('should get OS info', async (done) => {
@@ -66,9 +71,9 @@ describe('systemAgentCore use OSX', () => {
 
   it.skip('call teamview', async (done) => {
     try {
-      const teamviewPath = __dirname+'/../assets/osx/TeamViewerQS.app'
-      const result = await systemAgentCore.callTeamview({teamviewPath});
-
+      const teamviewPath = `${__dirname}/../assets/osx/TeamViewerQS.app`;
+      const result = await systemAgentCore.callTeamview({ teamviewPath });
+      result.success.should.be.equal(true);
       done();
     } catch (e) {
       done(e);
@@ -79,7 +84,7 @@ describe('systemAgentCore use OSX', () => {
     try {
       const result = await systemAgentCore.getHardwareInfo();
       console.log(result);
-
+      result.should.has.keys('model', 'cpu', 'cpuBenchmark', 'ram', 'network');
       done();
     } catch (e) {
       done(e);

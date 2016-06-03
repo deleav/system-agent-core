@@ -3,10 +3,9 @@ import Client from 'ftp';
 import config from '../config';
 
 const { ulConfig, dlConfig } = config;
-const session = ping.createSession();
-const client = new Client();
 
 export function getPingByRemoteHost(host, cb) {
+  const session = ping.createSession();
   session.pingHost(host, (error, target, sent, rcvd) => {
     const ms = rcvd - sent;
 
@@ -19,6 +18,7 @@ export function getPingByRemoteHost(host, cb) {
 }
 
 export async function getUploadSpeed() {
+  const client = new Client();
   try {
     client.connect({
       host: ulConfig.host,
@@ -28,7 +28,7 @@ export async function getUploadSpeed() {
 
     const uploadFile = async () => {
       const startTime = Math.floor(new Date().getTime());
-      console.log(`startTime: ${startTime}`);
+      console.log(`upload startTime: ${startTime}`);
 
       const result = await new Promise((done) => {
         client.on('ready', () => {
@@ -38,7 +38,7 @@ export async function getUploadSpeed() {
             } else {
               client.end();
               const doneTime = Math.floor(new Date().getTime());
-              console.log(`doneTime: ${doneTime}`);
+              console.log(`upload doneTime: ${doneTime}`);
 
               done(8 * 10 * 1024 / (doneTime - startTime) * 1000);
             }
@@ -56,6 +56,7 @@ export async function getUploadSpeed() {
 }
 
 export async function getDownloadSpeed() {
+  const client = new Client();
   try {
     client.connect({
       host: dlConfig.host,
@@ -65,7 +66,7 @@ export async function getDownloadSpeed() {
 
     const downloadFile = async () => {
       const startTime = Math.floor(new Date().getTime());
-      console.log(`startTime: ${startTime}`);
+      console.log(`download startTime: ${startTime}`);
 
       const result = await new Promise((done) => {
         client.on('ready', () => {
@@ -75,7 +76,7 @@ export async function getDownloadSpeed() {
             } else {
               stream.once('close', () => {
                 const doneTime = Math.floor(new Date().getTime());
-                console.log(`doneTime: ${doneTime}`);
+                console.log(`download doneTime: ${doneTime}`);
 
                 client.end();
                 done(8 * 10 * 1024 / (doneTime - startTime) * 1000);

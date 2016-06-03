@@ -52,7 +52,7 @@ describe('systemAgentCore use Windows', () => {
     }
   });
 
-  it.only('should get download speed', async (done) => {
+  it('should get download speed', async (done) => {
     try {
       const result = await systemAgentCore.getDownloadSpeed();
       console.log(`download speed: ${result} Kbps`);

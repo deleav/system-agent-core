@@ -1,21 +1,13 @@
-export async function getNetworkInfo() {
-  try {
+import * as lib from './network';
 
-    let getNetworkSetup = async () => {
-      let cmd = '';
-      if(this.OSTYPE === 'OSX') cmd = 'networksetup -listallhardwareports';
-      else return ''
+export function getPingByRemoteHost(host, cb) {
+  lib.getPingByRemoteHost(host, cb);
+}
 
-      let result = await exec(cmd);
-      return result.stdout;
-    }
+export async function getUploadSpeed() {
+  return lib.getUploadSpeed();
+}
 
-    let result = {
-      networkSetup: await getNetworkSetup()
-    }
-
-    return result;
-  } catch (e) {
-    throw e;
-  }
+export async function getDownloadSpeed() {
+  return lib.getDownloadSpeed();
 }

@@ -1,4 +1,5 @@
 import { exec } from 'child-process-promise';
+import * as lib from './hardware';
 
 export async function getHardwareInfo() {
   try {
@@ -9,7 +10,8 @@ export async function getHardwareInfo() {
     };
 
     const result = {
-      cup: await getCpuInfo(),
+      cpu: await getCpuInfo(),
+      cpuBenchmark: await lib.getCpuBenchmark(),
     };
 
     return result;

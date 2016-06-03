@@ -29,17 +29,25 @@ export async function getSoftwareInfo() {
     };
 
     const getChromeVersion = async () => {
-      let cmd = '';
-      cmd = '/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --version';
-      const result = await exec(cmd);
-      return result.stdout;
+      try {
+        let cmd = '';
+        cmd = '/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --version';
+        const result = await exec(cmd);
+        return result.stdout;
+      } catch (e) {
+        return null;
+      }
     };
 
     const getFlashVersion = async () => {
-      let cmd = '';
-      cmd = 'defaults read /Library/Internet\\ Plug-Ins/Flash\\ Player.plugin/Contents/version.plist CFBundleVersion';
-      const result = await exec(cmd);
-      return result.stdout;
+      try {
+        let cmd = '';
+        cmd = 'defaults read /Library/Internet\\ Plug-Ins/Flash\\ Player.plugin/Contents/version.plist CFBundleVersion';
+        const result = await exec(cmd);
+        return result.stdout;
+      } catch (e) {
+        return '未偵測到';
+      }
     };
 
 
@@ -58,16 +66,11 @@ export async function getSoftwareInfo() {
 
 export async function callTeamview({ teamviewPath }) {
   try {
-    let cmd = '';
-    if (this.OSTYPE === 'OSX') {
-      cmd = `open -n ${teamviewPath} --args -AppCommandLineArg`;
-    }
-    const execResult = await exec(cmd);
-
+    const cmd = `open -n ${teamviewPath} --args -AppCommandLineArg`;
+    await exec(cmd);
     const result = {
       success: true,
     };
-
     return result;
   } catch (e) {
     throw e;

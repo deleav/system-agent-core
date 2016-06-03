@@ -1,14 +1,20 @@
 import SystemAgentCore from '../../src';
+import os from 'os';
 
-describe('systemAgentCore use Windows', () => {
+describe('systemAgentCore', () => {
   let systemAgentCore = null;
   beforeEach(() => {
-    systemAgentCore = new SystemAgentCore({ostype: 'WINDOWS'});
+    if (os.type() === 'Darwin') {
+      // Darwin 是 node 上的 OSX 代號
+      systemAgentCore = new SystemAgentCore({ ostype: 'OSX' });
+    } else {
+      systemAgentCore = new SystemAgentCore({ ostype: 'WINDOWS' });
+    }
   });
 
   it('should get OS info', async (done) => {
     try {
-      let result = await systemAgentCore.getOSInfo();
+      const result = await systemAgentCore.getOSInfo();
       result.should.has.keys('OSSoftwareData');
 
       done();
@@ -19,7 +25,7 @@ describe('systemAgentCore use Windows', () => {
 
   it('should get Browser info', async (done) => {
     try {
-      let result = await systemAgentCore.getSoftwareInfo();
+      const result = await systemAgentCore.getSoftwareInfo();
       console.log(result);
       result.should.has.keys('safari', 'chrome', 'flash');
 
@@ -63,9 +69,9 @@ describe('systemAgentCore use Windows', () => {
     }
   });
 
-  it.only('should trace route', (done) => {
+  it('should trace route', (done) => {
     systemAgentCore.traceRoute('172.217.25.99', 30, (result) => {
-      console.log(`done trace route: ${result}`);
+      console.log('trace route: \n', result);
 
       try {
         done();
@@ -77,9 +83,20 @@ describe('systemAgentCore use Windows', () => {
 
   it.skip('call teamview', async (done) => {
     try {
-      let teamviewPath = __dirname+'/../assets/osx/TeamViewerQS.app'
-      let result = await systemAgentCore.callTeamview({teamviewPath});
+      const teamviewPath = `${__dirname}/../assets/osx/TeamViewerQS.app`;
+      const result = await systemAgentCore.callTeamview({ teamviewPath });
+      result.success.should.be.equal(true);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
 
+  it('get osx hardware info', async (done) => {
+    try {
+      const result = await systemAgentCore.getHardwareInfo();
+      console.log(result);
+      result.should.has.keys('model', 'cpu', 'cpuBenchmark', 'ram', 'network');
       done();
     } catch (e) {
       done(e);

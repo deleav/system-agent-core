@@ -1,4 +1,3 @@
-
 import { exec } from 'child-process-promise';
 
 export async function getOSInfo() {
@@ -68,7 +67,7 @@ export async function callTeamview({ teamviewPath }) {
   try {
     let cmd = '';
     cmd = `${teamviewPath} --args -AppCommandLineArg`;
-    const execResult = await exec(cmd);
+    await exec(cmd);
 
     const result = {
       success: true,

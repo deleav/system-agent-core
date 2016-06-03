@@ -46,7 +46,7 @@ export async function getSoftwareInfo() {
         const result = await exec(cmd);
         return result.stdout;
       } catch (e) {
-        return null;
+        return '未偵測到';
       }
     };
 

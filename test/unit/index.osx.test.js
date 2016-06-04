@@ -1,5 +1,6 @@
 import SystemAgentCore from '../../src';
 
+
 describe.only('systemAgentCore use OSX', () => {
 
   let systemAgentCore = null;
@@ -35,21 +36,22 @@ describe.only('systemAgentCore use OSX', () => {
     }
   });
 
-  it('should get Network info', async (done) => {
+  it.only('should get Network info', (done) => {
     // this.timeout(10000);
-    try {
-      const result = await systemAgentCore.getNetworkInfo();
+    const result = systemAgentCore.getNetworkInfo((result) => {
+      console.log('test',result);
+      try {
+        result.should.has.keys('networkSetup');
+        done();
 
-      console.log(result);
+      } catch (e) {
+        done(e);
+      }
+    });
 
-      result.should.has.keys('ping');
-      result.should.has.keys('download');
-      result.should.has.keys('upload');
-
-      done();
-    } catch (e) {
-      done(e);
-    }
+    result.should.has.keys('ping');
+    result.should.has.keys('download');
+    result.should.has.keys('upload');
   });
 
   it.skip('call teamview', async (done) => {
@@ -64,7 +66,7 @@ describe.only('systemAgentCore use OSX', () => {
     }
   });
 
-  it.only('get osx hardware info', async (done) => {
+  it('get osx hardware info', async (done) => {
     try {
       const result = await systemAgentCore.getHardwareInfo();
       console.log(result);

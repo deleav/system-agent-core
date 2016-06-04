@@ -25,8 +25,8 @@ export default class systemAgentCore {
     return await softwareService[this.OSTYPE].getSoftwareInfo();
   }
 
-  async getNetworkInfo() {
-    return await networkService[this.OSTYPE].getNetworkInfo();
+  getNetworkInfo(cb) {
+    return networkService[this.OSTYPE].getNetworkInfo(cb);
   }
 
   async callTeamview({ teamviewPath }) {

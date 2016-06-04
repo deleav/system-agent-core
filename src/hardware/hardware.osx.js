@@ -2,7 +2,6 @@ import { exec } from 'child-process-promise';
 import networkService from '../network';
 import format from '../util/format';
 import * as lib from './hardware';
-console.log(lib);
 
 export async function getHardwareInfo() {
   try {

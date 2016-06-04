@@ -5,21 +5,25 @@ import config from '../config';
 const { ulConfig, dlConfig } = config;
 
 export function getPingByRemoteHost(host, cb) {
-  const session = ping.createSession();
-  session.pingHost(host, (error, target, sent, rcvd) => {
-    const ms = rcvd - sent;
+  try {
+    const session = ping.createSession();
+    session.pingHost(host, (error, target, sent, rcvd) => {
+      const ms = rcvd - sent;
 
-    if (error) {
-      cb(error.toString());
-    } else {
-      cb(ms);
-    }
-  });
+      if (error) {
+        cb(error.toString());
+      } else {
+        cb(ms);
+      }
+    });
+  } catch (e) {
+    throw e;
+  }
 }
 
 export async function getUploadSpeed() {
-  const client = new Client();
   try {
+    const client = new Client();
     client.connect({
       host: ulConfig.host,
       user: ulConfig.user,
@@ -56,8 +60,8 @@ export async function getUploadSpeed() {
 }
 
 export async function getDownloadSpeed() {
-  const client = new Client();
   try {
+    const client = new Client();
     client.connect({
       host: dlConfig.host,
       user: dlConfig.user,
@@ -96,23 +100,27 @@ export async function getDownloadSpeed() {
 }
 
 export function traceRoute(host, ttlOrOptions, cb) {
-  const session = ping.createSession();
-  const traceArr = [];
-  session.traceRoute(host, ttlOrOptions, (error, target, ttl, sent, rcvd) => {
-    const ms = rcvd - sent;
-    if (error) {
-      if (error instanceof ping.TimeExceededError) {
-        traceArr.push(`${target} : ${error.source} (ttl=${ttl} ms=${ms})`);
+  try {
+    const session = ping.createSession();
+    const traceArr = [];
+    session.traceRoute(host, ttlOrOptions, (error, target, ttl, sent, rcvd) => {
+      const ms = rcvd - sent;
+      if (error) {
+        if (error instanceof ping.TimeExceededError) {
+          traceArr.push(`${target} : ${error.source} (ttl=${ttl} ms=${ms})`);
+        } else {
+          traceArr.push(`${target} : ${error.toString()} (ttl=${ttl} ms=${ms})`);
+        }
       } else {
-        traceArr.push(`${target} : ${error.toString()} (ttl=${ttl} ms=${ms})`);
+        traceArr.push(`${target} : ${target} (ttl=${ttl} ms=${ms})`);
       }
-    } else {
-      traceArr.push(`${target} : ${target} (ttl=${ttl} ms=${ms})`);
-    }
-  }, (error, target) => {
-    if (error) {
-      traceArr.push(`${target} : ${error.toString()}`);
-    }
-    cb(traceArr);
-  });
+    }, (error, target) => {
+      if (error) {
+        traceArr.push(`${target} : ${error.toString()}`);
+      }
+      cb(traceArr);
+    });
+  } catch (e) {
+    throw e;
+  }
 }

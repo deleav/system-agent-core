@@ -76,6 +76,7 @@ describe('systemAgentCore', () => {
       try {
         done();
       } catch (e) {
+        console.log('trace error');
         done(e);
       }
     });

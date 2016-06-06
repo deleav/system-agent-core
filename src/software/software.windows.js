@@ -34,7 +34,7 @@ export async function getSoftwareInfo() {
       // get chrome version
       const objRE = new RegExp('\\d*\\.\\d*\\.\\d*\\.\\d*', 'g');
       const match = str.match(objRE);
-      const result = `Google Chrome ${match[0]}`;
+      const result = match[0];
       return result;
     };
 
@@ -45,15 +45,51 @@ export async function getSoftwareInfo() {
       // get flash version
       const objRE = new RegExp('\\d*\\,\\d*\\,\\d*\\,\\d*', 'g');
       const match = str.match(objRE);
-      const result = `Flash ${match[0]}`;
+      const result = match[0];
       return result;
     };
 
+    const getIEVersion = async () => {
+      const cmd = ' reg query "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Internet Explorer" /v version | findstr \"version\"';
+      const regQuery = await exec(cmd);
+      const str = regQuery.stdout;
+      const objRE = new RegExp('\\d*\\.\\d*\\.\\d*\\.\\d*', 'g');
+      const match = str.match(objRE);
+      const result = match[0];
+      return result;
+    };
+
+    const getFireFoxVersion = async () => {
+      const cmd = ' reg query "HKEY_LOCAL_MACHINE\\Software\\Mozilla\\Mozilla Firefox" /v CurrentVersion';
+      const regQuery = await exec(cmd);
+      const str = regQuery.stdout;
+      const objRE = new RegExp('\\d*\\.\\d*\\.\\d*', 'g');
+      const match = str.match(objRE);
+      const result = match[0];
+      return result;
+    };
+
+    const get360Version = async () => {
+      try {
+        const cmd = ' reg query "HKEY_CURRENT_USER\\Software\\360\\360se6\\Update\\clients\\{02E720BD-2B50-4404-947C-65DBE64F6970}" /v pv ';
+        const regQuery = await exec(cmd);
+        const str = regQuery.stdout;
+        const objRE = new RegExp('\\d*\\.\\d*\\.\\d*\\.\\d*', 'g');
+        const match = str.match(objRE);
+        const result = match[0];
+        return result;
+      } catch (e) {
+        return null
+      }
+    };
 
     const result = {
-      safari: '',
+      safari: null,
       chrome: await getChromeVersion(),
       flash: await getFlashVersion(),
+      ie: await getIEVersion(),
+      firefox: await getFireFoxVersion(),
+      360: await get360Version(),
     };
 
     return result;

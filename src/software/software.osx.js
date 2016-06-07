@@ -55,6 +55,7 @@ export async function getSoftwareInfo() {
       safari: await getSafariVersion(),
       chrome: await getChromeVersion(),
       flash: await getFlashVersion(),
+      ie: null,
     };
 
     return result;

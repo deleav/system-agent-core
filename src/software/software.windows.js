@@ -25,28 +25,36 @@ export async function getOSInfo() {
 export async function getSoftwareInfo() {
   try {
     const getChromeVersion = async () => {
-      const cmd = 'REG QUERY HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Google\\Update\\Clients\\{8A69D345-D564-463c-AFF1-A69D9E530F96}';;
-      // let regQuery = {
-      //   stdout: '\r\nHKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Google\\Update\\Clients\\{8A69D345-D564-463c-AFF1-A69D9E530F96}\r\n    name    REG_SZ    Google Chrome\r\n    oopcrashes    REG_DWORD    0x1\r\n    pv    REG_SZ    50.0.2661.102\r\n\r\nHKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Google\\Update\\Clients\\{8A69D345-D564-463c-AFF1-A69D9E530F96}\\Commands\r\n'
-      // };
-      const regQuery = await exec(cmd);
-      const str = regQuery.stdout;
-      // get chrome version
-      const objRE = new RegExp('\\d*\\.\\d*\\.\\d*\\.\\d*', 'g');
-      const match = str.match(objRE);
-      const result = match[0];
-      return result;
+      try {
+        const cmd = 'REG QUERY HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Google\\Update\\Clients\\{8A69D345-D564-463c-AFF1-A69D9E530F96}';;
+        // let regQuery = {
+        //   stdout: '\r\nHKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Google\\Update\\Clients\\{8A69D345-D564-463c-AFF1-A69D9E530F96}\r\n    name    REG_SZ    Google Chrome\r\n    oopcrashes    REG_DWORD    0x1\r\n    pv    REG_SZ    50.0.2661.102\r\n\r\nHKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Google\\Update\\Clients\\{8A69D345-D564-463c-AFF1-A69D9E530F96}\\Commands\r\n'
+        // };
+        const regQuery = await exec(cmd);
+        const str = regQuery.stdout;
+        // get chrome version
+        const objRE = new RegExp('\\d*\\.\\d*\\.\\d*\\.\\d*', 'g');
+        const match = str.match(objRE);
+        const result = match[0];
+        return result;
+      } catch (e) {
+        return '未偵測到';
+      }
     };
 
     const getFlashVersion = async () => {
-      const cmd = 'REG QUERY HKEY_LOCAL_MACHINE\\Software\\Macromedia\\flashplayer';
-      const regQuery = await exec(cmd);
-      const str = regQuery.stdout;
-      // get flash version
-      const objRE = new RegExp('\\d*\\,\\d*\\,\\d*\\,\\d*', 'g');
-      const match = str.match(objRE);
-      const result = match[0];
-      return result;
+      try {
+        const cmd = 'REG QUERY HKEY_LOCAL_MACHINE\\Software\\Macromedia\\flashplayer';
+        const regQuery = await exec(cmd);
+        const str = regQuery.stdout;
+        // get flash version
+        const objRE = new RegExp('\\d*\\,\\d*\\,\\d*\\,\\d*', 'g');
+        const match = str.match(objRE);
+        const result = match[0];
+        return result;
+      } catch (e) {
+        return '未偵測到';
+      }
     };
 
     const getIEVersion = async () => {
@@ -60,13 +68,17 @@ export async function getSoftwareInfo() {
     };
 
     const getFireFoxVersion = async () => {
-      const cmd = ' reg query "HKEY_LOCAL_MACHINE\\Software\\Mozilla\\Mozilla Firefox" /v CurrentVersion';
-      const regQuery = await exec(cmd);
-      const str = regQuery.stdout;
-      const objRE = new RegExp('\\d*\\.\\d*\\.\\d*', 'g');
-      const match = str.match(objRE);
-      const result = match[0];
-      return result;
+      try {
+        const cmd = ' reg query "HKEY_LOCAL_MACHINE\\Software\\Mozilla\\Mozilla Firefox" /v CurrentVersion';
+        const regQuery = await exec(cmd);
+        const str = regQuery.stdout;
+        const objRE = new RegExp('\\d*\\.\\d*\\.\\d*', 'g');
+        const match = str.match(objRE);
+        const result = match[0];
+        return result;
+      } catch (e) {
+        return '未偵測到';
+      }
     };
 
     const get360Version = async () => {
@@ -79,7 +91,7 @@ export async function getSoftwareInfo() {
         const result = match[0];
         return result;
       } catch (e) {
-        return null
+        return '未偵測到';
       }
     };
 

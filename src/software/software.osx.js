@@ -24,18 +24,24 @@ export async function getSoftwareInfo() {
     const getSafariVersion = async () => {
       let cmd = '';
       cmd = 'defaults read /Applications/Safari.app/Contents/version CFBundleShortVersionString';
-      const result = await exec(cmd);
-      return result.stdout;
+      const cmdResult = await exec(cmd);
+      const str = cmdResult.stdout;
+      const objRE = new RegExp('\\d*\\.\\d*\\.\\d*', 'g');
+      const match = str.match(objRE);
+      return match[0];
     };
 
     const getChromeVersion = async () => {
       try {
         let cmd = '';
         cmd = '/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --version';
-        const result = await exec(cmd);
-        return result.stdout;
+        const cmdResult = await exec(cmd);
+        const str = cmdResult.stdout;
+        const objRE = new RegExp('\\d*\\.\\d*\\.\\d*\\.\\d*', 'g');
+        const match = str.match(objRE);
+        return match[0];
       } catch (e) {
-        return null;
+        return '未偵測到';
       }
     };
 
@@ -43,8 +49,25 @@ export async function getSoftwareInfo() {
       try {
         let cmd = '';
         cmd = 'defaults read /Library/Internet\\ Plug-Ins/Flash\\ Player.plugin/Contents/version.plist CFBundleVersion';
-        const result = await exec(cmd);
-        return result.stdout;
+        const cmdResult = await exec(cmd);
+        const str = cmdResult.stdout;
+        const objRE = new RegExp('\\d*\\,\\d*\\,\\d*\\,\\d*', 'g');
+        const match = str.match(objRE);
+        return match[0];
+      } catch (e) {
+        return '未偵測到';
+      }
+    };
+
+    const getFirfoxVersion = async () => {
+      try {
+        let cmd = '';
+        cmd = '/Applications/Firefox.app/Contents/MacOS/firefox -version';
+        const cmdResult = await exec(cmd);
+        const str = cmdResult.stdout;
+        const objRE = new RegExp('\\d*\\.\\d*\\.\\d*', 'g');
+        const match = str.match(objRE);
+        return match[0];
       } catch (e) {
         return '未偵測到';
       }
@@ -56,6 +79,8 @@ export async function getSoftwareInfo() {
       chrome: await getChromeVersion(),
       flash: await getFlashVersion(),
       ie: null,
+      firefox: await getFirfoxVersion(),
+      360: null,
     };
 
     return result;

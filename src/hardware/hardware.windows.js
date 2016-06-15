@@ -30,9 +30,9 @@ export async function getHardwareInfo() {
 
       const result = sizeArray.map((info, i) => {
         return {
-          size: `${sizeArray[i]} GB`,
+          size: `${sizeArray[i]}`,
           type: null,
-          speed: `${speedArray[i]} MHz`,
+          speed: `${speedArray[i]}`,
           status: 'OK',
         };
       });

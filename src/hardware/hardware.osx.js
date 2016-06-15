@@ -30,9 +30,9 @@ export async function getHardwareInfo() {
           objRE.lastIndex++;
         }
         matchArray.push({
-          size: match[1],
+          size: match[1].replace('GB', ''),
           type: match[2],
-          speed: match[3],
+          speed: match[3].replace('MHz', ''),
           status: match[4],
         });
       }

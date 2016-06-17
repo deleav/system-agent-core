@@ -1,5 +1,4 @@
-export async function exportReport(jsonSrc) {
-  const result = JSON.parse(jsonSrc);
+export async function exportReport(json) {
 
-  return result;
+  return true;
 }

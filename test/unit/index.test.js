@@ -23,7 +23,7 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it('should get Browser info', async (done) => {
+  it('should get software info', async (done) => {
     try {
       const result = await systemAgentCore.getSoftwareInfo();
       console.log(result);

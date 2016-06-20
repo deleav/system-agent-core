@@ -2,8 +2,8 @@ import { exec } from 'child-process-promise';
 import networkService from '../network';
 import format from '../util/format';
 import { wmicArray } from '../util/wmic';
+import { windowsExec } from '../util/windowsExec';
 import * as lib from './hardware';
-import iconv from 'iconv-lite';
 
 export async function getHardwareInfo() {
   try {
@@ -15,11 +15,8 @@ export async function getHardwareInfo() {
 
     const getModelInfo = async () => {
       const cmd = 'wmic os get caption';
-      const encoding = 'big5';
-      const binaryEncoding = 'binary';
-      const result = await exec(cmd, {encoding: binaryEncoding});
-      const cmdDecode = iconv.decode(new Buffer(result.stdout, binaryEncoding), encoding);
-      return format.formateWmic(cmdDecode);
+      const result = await windowsExec(cmd);
+      return format.formateWmic(result);
     };
 
     const getRamlInfo = async () => {

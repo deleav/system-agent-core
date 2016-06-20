@@ -1,4 +1,5 @@
-import SystemAgentCore from '../../src';
+import SystemAgentCore from '../../lib';
+// import SystemAgentCore from '../../src';
 import os from 'os';
 
 describe('systemAgentCore', () => {
@@ -47,7 +48,7 @@ describe('systemAgentCore', () => {
     });
   });
 
-  it('should get upload speed', async (done) => {
+  it.only('should get upload speed', async (done) => {
     try {
       const result = await systemAgentCore.getUploadSpeed();
       console.log(`upload speed: ${result} Kbps`);

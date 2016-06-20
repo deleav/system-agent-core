@@ -21,9 +21,12 @@ export async function getUploadSpeed() {
   const client = new Client();
   try {
     client.connect({
-      host: ulConfig.host,
-      user: ulConfig.user,
-      password: ulConfig.pwd,
+      // host: ulConfig.host,
+      // user: ulConfig.user,
+      // password: ulConfig.pwd,
+      host: 'speedtest.tele2.net',
+      user: 'anonymous',
+      password: '',
     });
 
     const uploadFile = async () => {

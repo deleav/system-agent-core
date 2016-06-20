@@ -96,7 +96,20 @@ describe('systemAgentCore', () => {
     try {
       const result = await systemAgentCore.getHardwareInfo();
       console.log(result);
-      result.should.has.keys('model', 'cpu', 'cpuBenchmark', 'ram', 'network');
+      result.should.has.keys('model', 'cpu', 'ram', 'network');
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
+  function echo(b) {
+    console.log(b);
+  }
+
+  it.only('get getCpuBenchmark', (done) => {
+    try {
+      const result = systemAgentCore.getCpuBenchmark(echo);
       done();
     } catch (e) {
       done(e);

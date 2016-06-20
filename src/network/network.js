@@ -27,22 +27,27 @@ export async function getUploadSpeed() {
     });
 
     const uploadFile = async () => {
-      const startTime = Math.floor(new Date().getTime());
-      console.log(`upload startTime: ${startTime}`);
 
       const result = await new Promise((done) => {
         client.on('ready', () => {
-          client.put(ulConfig.src, ulConfig.dest, (err) => {
-            if (err) {
-              done(err.toString());
-            } else {
-              client.end();
-              const doneTime = Math.floor(new Date().getTime());
-              console.log(`upload doneTime: ${doneTime}`);
 
-              done(8 * 10 * 1024 / (doneTime - startTime) * 1000);
-            }
-          });
+          client.delete(ulConfig.src, (err) => {
+
+            const startTime = Math.floor(new Date().getTime());
+            console.log(`upload startTime: ${startTime}`, new Date());
+            client.put(ulConfig.src, ulConfig.dest, (err) => {
+              if (err) {
+                done(err.toString());
+              } else {
+                client.end();
+                const doneTime = Math.floor(new Date().getTime());
+                console.log(`upload doneTime: ${doneTime}`, new Date());
+
+                done(8 * 10 * 1024 / (doneTime - startTime) * 1000);
+              }
+            });
+
+          })
         });
       });
 
@@ -65,11 +70,11 @@ export async function getDownloadSpeed() {
     });
 
     const downloadFile = async () => {
-      const startTime = Math.floor(new Date().getTime());
-      console.log(`download startTime: ${startTime}`);
 
       const result = await new Promise((done) => {
         client.on('ready', () => {
+          const startTime = Math.floor(new Date().getTime());
+          console.log(`download startTime: ${startTime}`);
           client.get(dlConfig.target, (err, stream) => {
             if (err) {
               done(err.toString());

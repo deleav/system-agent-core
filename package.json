@@ -36,6 +36,7 @@
     "babel-runtime": "^6.6.1",
     "child-process-promise": "^2.0.1",
     "ftp": "^0.3.10",
+    "iconv-lite": "^0.4.13",
     "net-ping": "^1.2.0"
   }
 }

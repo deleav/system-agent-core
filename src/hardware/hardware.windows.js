@@ -2,6 +2,7 @@ import { exec } from 'child-process-promise';
 import networkService from '../network';
 import format from '../util/format';
 import { wmicArray } from '../util/wmic';
+import { windowsExec } from '../util/windowsExec';
 import * as lib from './hardware';
 
 export async function getHardwareInfo() {
@@ -14,8 +15,8 @@ export async function getHardwareInfo() {
 
     const getModelInfo = async () => {
       const cmd = 'wmic os get caption';
-      const result = await exec(cmd);
-      return format.formateWmic(result.stdout);
+      const result = await windowsExec(cmd);
+      return format.formateWmic(result);
     };
 
     const getRamlInfo = async () => {

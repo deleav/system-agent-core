@@ -37,7 +37,7 @@ export async function getSoftwareInfo() {
         const str = cmdResult.stdout;
         return str.replace('Google Chrome ', '').replace('\n', '').trim();
       } catch (e) {
-        return '未偵測到';
+        return 'notFound';
       }
     };
 
@@ -49,7 +49,7 @@ export async function getSoftwareInfo() {
         const str = cmdResult.stdout.replace('\n', '');
         return str;
       } catch (e) {
-        return '未偵測到';
+        return 'notFound';
       }
     };
 
@@ -61,7 +61,7 @@ export async function getSoftwareInfo() {
         const str = cmdResult.stdout;
         return str.replace('Mozilla Firefox ', '').replace('\n', '').trim();
       } catch (e) {
-        return '未偵測到';
+        return 'notFound';
       }
     };
 

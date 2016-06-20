@@ -21,6 +21,10 @@ export default class systemAgentCore {
     return await hardwareService[this.OSTYPE].getHardwareInfo();
   }
 
+  getCpuBenchmark(callback) {
+    return hardwareService[this.OSTYPE].getCpuBenchmark(callback);
+  }
+
   async getSoftwareInfo() {
     return await softwareService[this.OSTYPE].getSoftwareInfo();
   }

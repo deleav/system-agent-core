@@ -2,7 +2,7 @@ import { exec } from 'child-process-promise';
 import networkService from '../network';
 import format from '../util/format';
 import { wmicArray } from '../util/wmic';
-import * as lib from './hardware';
+import { windowsExec } from '../util/windowsExec';
 
 export async function getHardwareInfo() {
   try {
@@ -14,8 +14,8 @@ export async function getHardwareInfo() {
 
     const getModelInfo = async () => {
       const cmd = 'wmic os get caption';
-      const result = await exec(cmd);
-      return format.formateWmic(result.stdout);
+      const result = await windowsExec(cmd);
+      return format.formateWmic(result);
     };
 
     const getRamlInfo = async () => {
@@ -42,7 +42,6 @@ export async function getHardwareInfo() {
     const result = {
       model: await getModelInfo(),
       cpu: await getCpuInfo(),
-      cpuBenchmark: await lib.getCpuBenchmark(),
       ram: await getRamlInfo(),
       network: await networkService.WINDOWS.getNetworkHardwareInfo(),
     };

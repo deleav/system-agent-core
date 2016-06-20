@@ -25,10 +25,8 @@ export async function getSoftwareInfo() {
       let cmd = '';
       cmd = 'defaults read /Applications/Safari.app/Contents/version CFBundleShortVersionString';
       const cmdResult = await exec(cmd);
-      const str = cmdResult.stdout;
-      const objRE = new RegExp('\\d*\\.\\d*\\.\\d*', 'g');
-      const match = str.match(objRE);
-      return match[0];
+      const str = cmdResult.stdout.replace('\n', '');
+      return str;
     };
 
     const getChromeVersion = async () => {
@@ -37,9 +35,7 @@ export async function getSoftwareInfo() {
         cmd = '/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --version';
         const cmdResult = await exec(cmd);
         const str = cmdResult.stdout;
-        const objRE = new RegExp('\\d*\\.\\d*\\.\\d*\\.\\d*', 'g');
-        const match = str.match(objRE);
-        return match[0];
+        return str.replace('Google Chrome ', '').replace('\n', '').trim();
       } catch (e) {
         return '未偵測到';
       }
@@ -50,10 +46,8 @@ export async function getSoftwareInfo() {
         let cmd = '';
         cmd = 'defaults read /Library/Internet\\ Plug-Ins/Flash\\ Player.plugin/Contents/version.plist CFBundleVersion';
         const cmdResult = await exec(cmd);
-        const str = cmdResult.stdout;
-        const objRE = new RegExp('\\d*\\,\\d*\\,\\d*\\,\\d*', 'g');
-        const match = str.match(objRE);
-        return match[0];
+        const str = cmdResult.stdout.replace('\n', '');
+        return str;
       } catch (e) {
         return '未偵測到';
       }
@@ -65,9 +59,7 @@ export async function getSoftwareInfo() {
         cmd = '/Applications/Firefox.app/Contents/MacOS/firefox -version';
         const cmdResult = await exec(cmd);
         const str = cmdResult.stdout;
-        const objRE = new RegExp('\\d*\\.\\d*\\.\\d*', 'g');
-        const match = str.match(objRE);
-        return match[0];
+        return str.replace('Mozilla Firefox ', '').replace('\n', '').trim();
       } catch (e) {
         return '未偵測到';
       }

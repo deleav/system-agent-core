@@ -31,7 +31,7 @@ export async function getUploadSpeed() {
       const result = await new Promise((done) => {
         client.on('ready', () => {
 
-          client.delete(ulConfig.src, (err) => {
+          client.delete(ulConfig.dest, (err) => {
 
             client.list(ulConfig.folder, (err, list) => {
               console.log('before upload', list);

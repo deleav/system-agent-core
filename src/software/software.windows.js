@@ -38,7 +38,7 @@ export async function getSoftwareInfo() {
         const result = match[0];
         return result;
       } catch (e) {
-        return '未偵測到';
+        return 'notFound';
       }
     };
 
@@ -53,7 +53,7 @@ export async function getSoftwareInfo() {
         const result = match[0];
         return result;
       } catch (e) {
-        return '未偵測到';
+        return 'notFound';
       }
     };
 
@@ -77,7 +77,7 @@ export async function getSoftwareInfo() {
         const result = match[0];
         return result;
       } catch (e) {
-        return '未偵測到';
+        return 'notFound';
       }
     };
 
@@ -91,7 +91,7 @@ export async function getSoftwareInfo() {
         const result = match[0];
         return result;
       } catch (e) {
-        return '未偵測到';
+        return 'notFound';
       }
     };
 

@@ -41,7 +41,7 @@ export async function getSoftwareInfo() {
         const match = str.match(objRE);
         return match[0];
       } catch (e) {
-        return '未偵測到';
+        return 'notFound';
       }
     };
 
@@ -55,7 +55,7 @@ export async function getSoftwareInfo() {
         const match = str.match(objRE);
         return match[0];
       } catch (e) {
-        return '未偵測到';
+        return 'notFound';
       }
     };
 
@@ -69,7 +69,7 @@ export async function getSoftwareInfo() {
         const match = str.match(objRE);
         return match[0];
       } catch (e) {
-        return '未偵測到';
+        return 'notFound';
       }
     };
 

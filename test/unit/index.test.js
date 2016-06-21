@@ -107,7 +107,7 @@ describe('systemAgentCore', () => {
     console.log(b);
   }
 
-  it.only('get getCpuBenchmark', (done) => {
+  it('get getCpuBenchmark', (done) => {
     try {
       const result = systemAgentCore.getCpuBenchmark(echo);
       done();

@@ -1,12 +1,10 @@
 import ftp from './ftp';
 
 const uploads = {
-  host: ftp.host,
-  user: ftp.user,
-  pwd: ftp.pwd,
+  ...ftp,
   src: 'test10MB',
   dest: 'uploads/test10MB',
-  folder: 'uploads'
+  folder: 'uploads',
 };
 
 export default uploads;

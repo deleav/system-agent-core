@@ -37,6 +37,7 @@
     "child-process-promise": "^2.0.1",
     "ftp": "^0.3.10",
     "iconv-lite": "^0.4.13",
+    "ifconfig": "git+https://github.com/FuYaoDe/node-ifconfig.git",
     "net-ping": "^1.2.0"
   }
 }

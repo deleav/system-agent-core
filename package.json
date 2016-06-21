@@ -1,7 +1,7 @@
 {
   "name": "system-agent-core",
   "description": "",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "main": "lib/index.js",
   "author": "",
   "repository": "/system-agent-core",
@@ -37,6 +37,7 @@
     "child-process-promise": "^2.0.1",
     "ftp": "^0.3.10",
     "iconv-lite": "^0.4.13",
+    "ifconfig": "git+https://github.com/FuYaoDe/node-ifconfig.git",
     "net-ping": "^1.2.0"
   }
 }

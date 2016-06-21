@@ -1,4 +1,6 @@
 import { exec } from 'child-process-promise';
+import ifconfig from 'ifconfig';
+
 
 export async function getNetworkHardwareInfo() {
   const cmd = 'networksetup -listallhardwareports';
@@ -14,8 +16,25 @@ export async function getNetworkHardwareInfo() {
       hardware: match[1],
       device: match[2],
       ethernetAddress: match[3],
+      enable: false,
     });
   }
+  const ifconfigJson = await new Promise((done) => {
+    ifconfig((err, results) => {
+      if (err) {
+        console.log("ERROR: %s\n%s", err, results);
+      }
+      done(results);
+    });
+  });
+
+  Object.keys(ifconfigJson).forEach((key) => {
+    matchArray.forEach((item, i) => {
+      if (ifconfigJson[key].status && ifconfigJson[key].ether === item.ethernetAddress) {
+        matchArray[i].enable = ifconfigJson[key].status === 'active';
+      }
+    });
+  });
   return matchArray;
 }
 

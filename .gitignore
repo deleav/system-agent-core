@@ -28,6 +28,7 @@ node_modules
 
 # Babel compiled sources
 lib
+test10MB
 
 # Miscellaneous
 *~

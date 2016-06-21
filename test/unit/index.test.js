@@ -52,6 +52,7 @@ describe('systemAgentCore', () => {
   });
 
   it('should get upload speed', async(done) => {
+
     try {
       const result = await systemAgentCore.getUploadSpeed();
       console.log(`upload speed: ${result} Kbps`);

@@ -1,6 +1,7 @@
 import ping from 'net-ping';
 import Client from 'ftp';
 import config from '../config';
+import fs from 'fs';
 
 const { ulConfig, dlConfig } = config;
 
@@ -29,35 +30,39 @@ export async function getUploadSpeed() {
     const uploadFile = async () => {
 
       const result = await new Promise((done) => {
-        client.on('ready', () => {
+        fs.stat('foo.txt', (err) => {
+          if (err.code === 'ENOENT') {
+            // file does not exist
+            fs.writeFile(__dirname + '/../../test10MB', new Buffer(1024 * 1024 * 10), () => {
+              client.on('ready', () => {
+                client.delete(ulConfig.dest, (err) => {
+                  client.list(ulConfig.folder, (err, list) => {
+                    console.log('before upload', list);
+                    const startTime = Math.floor(new Date().getTime());
+                    console.log(`upload startTime: ${startTime}`, new Date());
+                    console.log('file dir', __dirname+'/../../test10MB');
+                    client.put(__dirname+'/../../test10MB', ulConfig.dest, (err) => {
 
-          client.delete(ulConfig.dest, (err) => {
+                      client.list(ulConfig.folder, (err, list) => {
+                        console.log('after upload', list);
+                        if (err) {
+                          done(err.toString());
+                        } else {
+                          client.end();
+                          const doneTime = Math.floor(new Date().getTime());
+                          console.log(`upload doneTime: ${doneTime}`, new Date());
 
-            client.list(ulConfig.folder, (err, list) => {
-              console.log('before upload', list);
-              const startTime = Math.floor(new Date().getTime());
-              console.log(`upload startTime: ${startTime}`, new Date());
-              console.log('file dir', __dirname+'/../../test10MB');
-              client.put(__dirname+'/../../test10MB', ulConfig.dest, (err) => {
-
-                client.list(ulConfig.folder, (err, list) => {
-                  console.log('after upload', list);
-                  if (err) {
-                    done(err.toString());
-                  } else {
-                    client.end();
-                    const doneTime = Math.floor(new Date().getTime());
-                    console.log(`upload doneTime: ${doneTime}`, new Date());
-
-                    done(8 * 10 * 1024 / (doneTime - startTime) * 1000);
-                  }
+                          done(8 * 10 * 1024 / (doneTime - startTime) * 1000);
+                        }
+                      });
+                    });
+                  });
                 });
               });
-
-
             });
-
-          })
+          } else {
+              console.log('Some other error: ', err.code);
+          }
         });
       });
 

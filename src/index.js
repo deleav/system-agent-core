@@ -1,6 +1,7 @@
 import hardwareService from './hardware';
 import softwareService from './software';
 import networkService from './network';
+import * as reportService from './report';
 
 export default class systemAgentCore {
 
@@ -51,5 +52,9 @@ export default class systemAgentCore {
 
   async callTeamview({ teamviewPath }) {
     return await softwareService[this.OSTYPE].callTeamview(teamviewPath);
+  }
+
+  async exportReport(info) {
+    return await reportService.exportReport(info);
   }
 }

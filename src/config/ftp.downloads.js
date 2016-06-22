@@ -1,9 +1,7 @@
 import ftp from './ftp';
 
 const downloads = {
-  host: ftp.host,
-  user: ftp.user,
-  pwd: ftp.pwd,
+  ...ftp,
   target: 'downloads/test10MB',
 };
 

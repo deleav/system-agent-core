@@ -103,7 +103,7 @@ describe('systemAgentCore', () => {
     try {
       const result = await systemAgentCore.getHardwareInfo();
       console.log(result);
-      result.should.has.keys('model', 'cpu', 'ram', 'network', 'traceRoute', 'software');
+      result.should.has.keys('model', 'cpu', 'ram', 'network');
       done();
     } catch (e) {
       done(e);

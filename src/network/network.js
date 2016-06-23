@@ -11,7 +11,7 @@ export function getPingByRemoteHost(host, cb) {
     const ms = rcvd - sent;
 
     if (error) {
-      cb(error.toString());
+      cb(0, error.toString());
     } else {
       cb(ms);
     }
@@ -28,40 +28,46 @@ export async function getUploadSpeed() {
     });
 
     const uploadFile = async () => {
-
       const result = await new Promise((done) => {
-        fs.stat('foo.txt', (err) => {
-          if (err.code === 'ENOENT') {
-            // file does not exist
-            fs.writeFile(__dirname + '/../../test10MB', new Buffer(1024 * 1024 * 10), () => {
-              client.on('ready', () => {
-                client.delete(ulConfig.dest, (err) => {
-                  client.list(ulConfig.folder, (err, list) => {
-                    console.log('before upload', list);
-                    const startTime = Math.floor(new Date().getTime());
-                    console.log(`upload startTime: ${startTime}`, new Date());
-                    console.log('file dir', __dirname+'/../../test10MB');
-                    client.put(__dirname+'/../../test10MB', ulConfig.dest, (err) => {
-
+        getPingByRemoteHost(ulConfig.host, (ping) => {
+          if (ping !== 0) {
+            fs.stat('foo.txt', (err) => {
+              if (err.code === 'ENOENT') {
+                // file does not exist
+                fs.writeFile(__dirname + '/../../test10MB', new Buffer(1024 * 1024 * 10), () => {
+                  client.on('ready', () => {
+                    client.delete(ulConfig.dest, (err) => {
                       client.list(ulConfig.folder, (err, list) => {
-                        console.log('after upload', list);
-                        if (err) {
-                          done(err.toString());
-                        } else {
-                          client.end();
-                          const doneTime = Math.floor(new Date().getTime());
-                          console.log(`upload doneTime: ${doneTime}`, new Date());
+                        console.log('before upload', list);
+                        const startTime = Math.floor(new Date().getTime());
+                        console.log(`upload startTime: ${startTime}`, new Date());
+                        console.log('file dir', __dirname+'/../../test10MB');
+                        client.put(__dirname+'/../../test10MB', ulConfig.dest, (err) => {
 
-                          done(8 * 10 * 1024 / (doneTime - startTime) * 1000);
-                        }
+                          client.list(ulConfig.folder, (err, list) => {
+                            console.log('after upload', list);
+                            if (err) {
+                              done(err.toString());
+                            } else {
+                              client.end();
+                              const doneTime = Math.floor(new Date().getTime());
+                              console.log(`upload doneTime: ${doneTime}`, new Date());
+
+                              done(8 * 10 * 1024 / (doneTime - startTime) * 1000);
+                            }
+                          });
+                        });
                       });
                     });
                   });
                 });
-              });
+              } else {
+                console.log('Some other error: ', err.code);
+                done(err.toString());
+              }
             });
           } else {
-              console.log('Some other error: ', err.code);
+            done('networkError');
           }
         });
       });

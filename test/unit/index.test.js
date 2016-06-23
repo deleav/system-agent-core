@@ -63,6 +63,17 @@ describe('systemAgentCore', () => {
     }
   });
 
+  it('should upload fail', async(done) => {
+
+    try {
+      const result = await systemAgentCore.getUploadSpeed();
+      console.log(`${result}`);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
   it('should get download speed', async(done) => {
     try {
       const result = await systemAgentCore.getDownloadSpeed();

@@ -20,6 +20,21 @@ export function getPingByRemoteHost(host, cb) {
 
 export async function getUploadSpeed() {
   const client = new Client();
+  const startUpload = (done, err) => {
+    const startTime = Math.floor(new Date().getTime());
+    client.put(`${__dirname}/../../test10MB`, ulConfig.dest, (err, list) => {
+      client.list(ulConfig.folder, (err, list) => {
+        if (err) {
+          done(err.toString());
+        } else {
+          client.end();
+          const doneTime = Math.floor(new Date().getTime());
+
+          done(8 * 10 * 1024 / (doneTime - startTime) * 1000);
+        }
+      });
+    });
+  };
   try {
     client.connect({
       host: ulConfig.host,
@@ -31,43 +46,28 @@ export async function getUploadSpeed() {
       const result = await new Promise((done) => {
         getPingByRemoteHost(ulConfig.host, (ping) => {
           if (ping !== 0) {
-            fs.stat('foo.txt', (err) => {
-              if (err.code === 'ENOENT') {
-                // file does not exist
-                fs.writeFile(__dirname + '/../../test10MB', new Buffer(1024 * 1024 * 10), () => {
-                  client.on('ready', () => {
-                    client.delete(ulConfig.dest, (err) => {
-                      client.list(ulConfig.folder, (err, list) => {
-                        console.log('before upload', list);
-                        const startTime = Math.floor(new Date().getTime());
-                        console.log(`upload startTime: ${startTime}`, new Date());
-                        console.log('file dir', __dirname+'/../../test10MB');
-                        client.put(__dirname+'/../../test10MB', ulConfig.dest, (err) => {
-
-                          client.list(ulConfig.folder, (err, list) => {
-                            console.log('after upload', list);
-                            if (err) {
-                              done(err.toString());
-                            } else {
-                              client.end();
-                              const doneTime = Math.floor(new Date().getTime());
-                              console.log(`upload doneTime: ${doneTime}`, new Date());
-
-                              done(8 * 10 * 1024 / (doneTime - startTime) * 1000);
-                            }
-                          });
+            fs.stat(`${__dirname}/../../test10MB`, (err) => {
+              if (err) {
+                if (err.code === 'ENOENT') {
+                  fs.writeFile(`${__dirname}/../../test10MB`, new Buffer(1024 * 1024 * 10), () => {
+                    client.on('ready', () => {
+                      client.delete(ulConfig.dest, (err) => {
+                        client.list(ulConfig.folder, (err, list) => {
+                          startUpload(done, err, list);
                         });
                       });
                     });
                   });
-                });
+                } else {
+                  console.log('Some other error: ', err.code);
+                  done(err.toString());
+                }
               } else {
-                console.log('Some other error: ', err.code);
-                done(err.toString());
+                startUpload(done, null, null);
               }
             });
           } else {
-            done('networkError');
+            done('error');
           }
         });
       });
@@ -91,24 +91,29 @@ export async function getDownloadSpeed() {
     });
 
     const downloadFile = async () => {
-
       const result = await new Promise((done) => {
-        client.on('ready', () => {
-          const startTime = Math.floor(new Date().getTime());
-          console.log(`download startTime: ${startTime}`);
-          client.get(dlConfig.target, (err, stream) => {
-            if (err) {
-              done(err.toString());
-            } else {
-              stream.once('close', () => {
-                const doneTime = Math.floor(new Date().getTime());
-                console.log(`download doneTime: ${doneTime}`);
+        getPingByRemoteHost(ulConfig.host, (ping) => {
+          if (ping !== 0) {
+            client.on('ready', () => {
+              const startTime = Math.floor(new Date().getTime());
+              console.log(`download startTime: ${startTime}`);
+              client.get(dlConfig.target, (err, stream) => {
+                if (err) {
+                  done(err.toString());
+                } else {
+                  stream.once('close', () => {
+                    const doneTime = Math.floor(new Date().getTime());
+                    console.log(`download doneTime: ${doneTime}`);
 
-                client.end();
-                done(8 * 10 * 1024 / (doneTime - startTime) * 1000);
+                    client.end();
+                    done(8 * 10 * 1024 / (doneTime - startTime) * 1000);
+                  });
+                }
               });
-            }
-          });
+            });
+          } else {
+            done('error');
+          }
         });
       });
 

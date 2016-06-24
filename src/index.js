@@ -1,6 +1,7 @@
 import hardwareService from './hardware';
 import softwareService from './software';
 import networkService from './network';
+import * as errMsgService from './error';
 import * as reportService from './report';
 
 export default class systemAgentCore {
@@ -48,6 +49,10 @@ export default class systemAgentCore {
 
   traceRoute(host, ttlOrOptions, cb) {
     return networkService[this.OSTYPE].traceRoute(host, ttlOrOptions, cb);
+  }
+
+  async getErrorMsg(type) {
+    return errMsgService.getMessage(type);
   }
 
   async callTeamview({ teamviewPath }) {

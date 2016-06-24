@@ -7,11 +7,11 @@ describe('systemAgentCore', () => {
     if (os.type() === 'Darwin') {
       // Darwin 是 node 上的 OSX 代號
       systemAgentCore = new SystemAgentCore({
-        ostype: 'OSX'
+        ostype: 'OSX',
       });
     } else {
       systemAgentCore = new SystemAgentCore({
-        ostype: 'WINDOWS'
+        ostype: 'WINDOWS',
       });
     }
   });
@@ -52,7 +52,6 @@ describe('systemAgentCore', () => {
   });
 
   it('should get upload speed', async(done) => {
-
     try {
       const result = await systemAgentCore.getUploadSpeed();
       console.log(`upload speed: ${result} Kbps`);
@@ -64,7 +63,6 @@ describe('systemAgentCore', () => {
   });
 
   it('should upload fail', async(done) => {
-
     try {
       const result = await systemAgentCore.getUploadSpeed();
       console.log(`${result}`);
@@ -74,7 +72,7 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it('should get download speed', async(done) => {
+  it.skip('should get download speed', async(done) => {
     try {
       const result = await systemAgentCore.getDownloadSpeed();
       console.log(`download speed: ${result} Kbps`);
@@ -101,7 +99,7 @@ describe('systemAgentCore', () => {
     try {
       const teamviewPath = `${__dirname}/../assets/osx/TeamViewerQS.app`;
       const result = await systemAgentCore.callTeamview({
-        teamviewPath
+        teamviewPath,
       });
       result.success.should.be.equal(true);
       done();
@@ -208,6 +206,16 @@ describe('systemAgentCore', () => {
 
       const result = await systemAgentCore.exportReport(src);
       result.should.be.equal(true);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
+  it.only('get download error message', async(done) => {
+    try {
+      const result = await systemAgentCore.getErrorMsg('ERROR_NETWORK_DOWNLOAD');
+      console.log(result);
       done();
     } catch (e) {
       done(e);

@@ -2,7 +2,8 @@ import hardwareService from './hardware';
 import softwareService from './software';
 import networkService from './network';
 import * as errMsgService from './error';
-import * as reportService from './report';
+import * as reportService from './util/report';
+import * as configService from './util/config';
 
 export default class systemAgentCore {
 
@@ -39,12 +40,12 @@ export default class systemAgentCore {
     return networkService[this.OSTYPE].getPingByRemoteHost(host, cb);
   }
 
-  async getUploadSpeed() {
-    return networkService[this.OSTYPE].getUploadSpeed();
+  async getUploadSpeed(host) {
+    return networkService[this.OSTYPE].getUploadSpeed(host);
   }
 
-  async getDownloadSpeed() {
-    return networkService[this.OSTYPE].getDownloadSpeed();
+  async getDownloadSpeed(host) {
+    return networkService[this.OSTYPE].getDownloadSpeed(host);
   }
 
   traceRoute(host, ttlOrOptions, cb) {
@@ -61,5 +62,9 @@ export default class systemAgentCore {
 
   async exportReport(info) {
     return await reportService.exportReport(info);
+  }
+
+  async getConfig() {
+    return configService.getConfig();
   }
 }

@@ -212,10 +212,20 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it.only('get download error message', async(done) => {
+  it('get download error message', async(done) => {
     try {
       const result = await systemAgentCore.getErrorMsg('ERROR_NETWORK_DOWNLOAD');
       console.log(result);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
+  it.only('get server config', async(done) => {
+    try {
+      const result = await systemAgentCore.getConfig();
+      result.should.has.keys('ad', 'testServer', 'report', 'debug');
       done();
     } catch (e) {
       done(e);

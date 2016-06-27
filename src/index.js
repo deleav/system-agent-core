@@ -2,7 +2,8 @@ import hardwareService from './hardware';
 import softwareService from './software';
 import networkService from './network';
 import * as errMsgService from './error';
-import * as reportService from './report';
+import * as reportService from './util/report';
+import * as configService from './util/config';
 
 export default class systemAgentCore {
 
@@ -61,5 +62,9 @@ export default class systemAgentCore {
 
   async exportReport(info) {
     return await reportService.exportReport(info);
+  }
+
+  async getConfig() {
+    return configService.getConfig();
   }
 }

@@ -221,4 +221,14 @@ describe('systemAgentCore', () => {
       done(e);
     }
   });
+
+  it.only('get server config', async(done) => {
+    try {
+      const result = await systemAgentCore.getConfig();
+      result.should.has.keys('ad', 'testServer', 'report', 'debug');
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
 });

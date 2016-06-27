@@ -18,7 +18,7 @@ export function getPingByRemoteHost(host, cb) {
   });
 }
 
-export async function getUploadSpeed() {
+export async function getUploadSpeed(host) {
   const client = new Client();
   const startUpload = (done, err) => {
     const startTime = Math.floor(new Date().getTime());
@@ -37,7 +37,7 @@ export async function getUploadSpeed() {
   };
   try {
     client.connect({
-      host: ulConfig.host,
+      host: host || ulConfig.host,
       user: ulConfig.user,
       password: ulConfig.pwd,
     });
@@ -81,11 +81,11 @@ export async function getUploadSpeed() {
   }
 }
 
-export async function getDownloadSpeed() {
+export async function getDownloadSpeed(host) {
   const client = new Client();
   try {
     client.connect({
-      host: dlConfig.host,
+      host: host || dlConfig.host,
       user: dlConfig.user,
       password: dlConfig.pwd,
     });

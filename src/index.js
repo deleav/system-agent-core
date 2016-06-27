@@ -39,12 +39,12 @@ export default class systemAgentCore {
     return networkService[this.OSTYPE].getPingByRemoteHost(host, cb);
   }
 
-  async getUploadSpeed() {
-    return networkService[this.OSTYPE].getUploadSpeed();
+  async getUploadSpeed(host) {
+    return networkService[this.OSTYPE].getUploadSpeed(host);
   }
 
-  async getDownloadSpeed() {
-    return networkService[this.OSTYPE].getDownloadSpeed();
+  async getDownloadSpeed(host) {
+    return networkService[this.OSTYPE].getDownloadSpeed(host);
   }
 
   traceRoute(host, ttlOrOptions, cb) {

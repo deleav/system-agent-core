@@ -233,7 +233,7 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it.only('get fast server host', async(done) => {
+  it.only('get Host List Ping', async(done) => {
     const hostArray = [{
       name: '測試站1',
       host: '192.168.168.114',
@@ -244,7 +244,7 @@ describe('systemAgentCore', () => {
       name: '測試站3',
       host: '127.0.0.1',
     }];
-    systemAgentCore.getFastHost(hostArray, (result) => {
+    systemAgentCore.getHostListPing(hostArray, (result) => {
       console.log(result);
       try {
         done();

@@ -40,7 +40,7 @@ export function pingArray(hostArray, i, newHostArray, cb) {
   });
 }
 
-export async function getFastHost(hostArray, cb) {
+export async function getHostListPing(hostArray, cb) {
   pingArray(hostArray, 0, [], cb);
 }
 

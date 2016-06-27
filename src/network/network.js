@@ -4,18 +4,44 @@ import config from '../config';
 import fs from 'fs';
 
 const { ulConfig, dlConfig } = config;
+const session = ping.createSession({
+  networkProtocol: ping.NetworkProtocol.IPv4,
+  packetSize: 16,
+  retries: 1,
+  sessionId: (process.pid % 65535),
+  timeout: 500,
+  ttl: 128,
+});
 
 export function getPingByRemoteHost(host, cb) {
-  const session = ping.createSession();
   session.pingHost(host, (error, target, sent, rcvd) => {
     const ms = rcvd - sent;
-
     if (error) {
       cb(0, error.toString());
     } else {
       cb(ms);
     }
   });
+}
+
+export function pingArray(hostArray, i, newHostArray, cb) {
+  getPingByRemoteHost(hostArray[i].host, (time) => {
+    const newArray = newHostArray;
+    newArray.push({
+      name: hostArray[i].name,
+      host: hostArray[i].host,
+      time,
+    });
+    if (newArray.length === hostArray.length) {
+      cb(newArray);
+    } else {
+      pingArray(hostArray, i + 1, newArray, cb);
+    }
+  });
+}
+
+export async function getFastHost(hostArray, cb) {
+  pingArray(hostArray, 0, [], cb);
 }
 
 export async function getUploadSpeed(host) {

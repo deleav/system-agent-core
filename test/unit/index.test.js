@@ -222,13 +222,35 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it.only('get server config', async(done) => {
+  it('get server config', async(done) => {
     try {
       const result = await systemAgentCore.getConfig();
       result.should.has.keys('ad', 'testServer', 'report', 'debug');
+      console.log(result);
       done();
     } catch (e) {
       done(e);
     }
+  });
+
+  it.only('get fast server host', async(done) => {
+    const hostArray = [{
+      name: '測試站1',
+      host: '192.168.168.114',
+    }, {
+      name: '測試站2',
+      host: '172.217.25.99',
+    }, {
+      name: '測試站3',
+      host: '127.0.0.1',
+    }];
+    systemAgentCore.getFastHost(hostArray, (result) => {
+      console.log(result);
+      try {
+        done();
+      } catch (e) {
+        done(e);
+      }
+    });
   });
 });

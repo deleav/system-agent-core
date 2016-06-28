@@ -40,6 +40,10 @@ export default class systemAgentCore {
     return networkService[this.OSTYPE].getPingByRemoteHost(host, cb);
   }
 
+  async getHostListPing(hostArray, cb) {
+    return networkService[this.OSTYPE].getHostListPing(hostArray, cb);
+  }
+
   async getUploadSpeed(host) {
     return networkService[this.OSTYPE].getUploadSpeed(host);
   }

@@ -4,5 +4,5 @@ import downloads from './ftp.downloads';
 export default {
   ulConfig: uploads,
   dlConfig: downloads,
-  domain: 'http://127.0.0.1:1337',
+  domain: 'http://linode2.trunksys.com:1335',
 };

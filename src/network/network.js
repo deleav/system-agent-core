@@ -17,7 +17,7 @@ export function getPingByRemoteHost(host, cb) {
   session.pingHost(host, (error, target, sent, rcvd) => {
     const ms = rcvd - sent;
     if (error) {
-      cb(0, error.toString());
+      cb(9999, error.toString());
     } else {
       cb(ms);
     }
@@ -71,7 +71,7 @@ export async function getUploadSpeed(host) {
     const uploadFile = async () => {
       const result = await new Promise((done) => {
         getPingByRemoteHost(ulConfig.host, (ping) => {
-          if (ping !== 0) {
+          if (ping !== 9999) {
             fs.stat(`${__dirname}/../../test10MB`, (err) => {
               if (err) {
                 if (err.code === 'ENOENT') {
@@ -119,7 +119,7 @@ export async function getDownloadSpeed(host) {
     const downloadFile = async () => {
       const result = await new Promise((done) => {
         getPingByRemoteHost(ulConfig.host, (ping) => {
-          if (ping !== 0) {
+          if (ping !== 9999) {
             client.on('ready', () => {
               const startTime = Math.floor(new Date().getTime());
               console.log(`download startTime: ${startTime}`);

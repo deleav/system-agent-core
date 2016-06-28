@@ -4,16 +4,16 @@ import config from '../config';
 import fs from 'fs';
 
 const { ulConfig, dlConfig } = config;
-const session = ping.createSession({
-  networkProtocol: ping.NetworkProtocol.IPv4,
-  packetSize: 16,
-  retries: 1,
-  sessionId: (process.pid % 65535),
-  timeout: 500,
-  ttl: 128,
-});
 
 export function getPingByRemoteHost(host, cb) {
+  const session = ping.createSession({
+    networkProtocol: ping.NetworkProtocol.IPv4,
+    packetSize: 16,
+    retries: 1,
+    sessionId: (process.pid % 65535),
+    timeout: 500,
+    ttl: 128,
+  });
   session.pingHost(host, (error, target, sent, rcvd) => {
     const ms = rcvd - sent;
     if (error) {

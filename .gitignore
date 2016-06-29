@@ -39,4 +39,4 @@ nbproject
 .idea
 .node_history
 
-src/config/producion.js
+src/config/production.js

@@ -64,7 +64,7 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it.only('test jsftp module', async(done) => {
+  it('test jsftp module', async(done) => {
     try {
       const jsftp = new JSFtp({
         host: '139.162.20.180',
@@ -79,6 +79,26 @@ describe('systemAgentCore', () => {
             console.log("File transferred successfully!");
           done()
         });
+      });
+    } catch (e) {
+      done(e);
+    }
+  });
+
+  it('test ftp module', async(done) => {
+    try {
+      const client = new Client();
+      client.connect({
+      });
+      client.list('uploads', (err, list) => {
+        if (err) {
+          done(err.toString());
+        } else {
+          console.log(list);
+
+          client.end();
+            done()
+        }
       });
     } catch (e) {
       done(e);
@@ -133,7 +153,7 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it('get osx hardware info', async(done) => {
+  it.only('get osx hardware info', async(done) => {
     try {
       const result = await systemAgentCore.getHardwareInfo();
       console.log(result);

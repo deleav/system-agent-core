@@ -1,8 +1,8 @@
-import uploads from './ftp.uploads';
-import downloads from './ftp.downloads';
+// const env = 'development';
+const env = 'production';
+const config = require(`./${env}`);
 
+console.log(config.default);
 export default {
-  ulConfig: uploads,
-  dlConfig: downloads,
-  domain: 'http://linode2.trunksys.com:1335',
+  ...config.default,
 };

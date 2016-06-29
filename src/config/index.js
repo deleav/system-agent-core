@@ -1,8 +1,8 @@
-import uploads from './ftp.uploads';
-import downloads from './ftp.downloads';
+const env = 'development';
+const env = 'producion';
+const config = require(`./${env}`);
 
+console.log(config.default);
 export default {
-  ulConfig: uploads,
-  dlConfig: downloads,
-  domain: 'http://127.0.0.1:1337',
+  ...config.default,
 };

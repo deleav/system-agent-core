@@ -2,6 +2,7 @@ import ping from 'net-ping';
 import Client from 'ftp';
 import config from '../config';
 import fs from 'fs';
+import { roundDecimal } from '../util/format';
 
 const { ulConfig, dlConfig } = config;
 
@@ -56,7 +57,7 @@ export async function getUploadSpeed(host) {
           client.end();
           const doneTime = Math.floor(new Date().getTime());
 
-          done(8 * 10 * 1024 / (doneTime - startTime) * 1000);
+          done(roundDecimal(8 * 10 * 1024 / (doneTime - startTime) * 1000, 2));
         }
       });
     });
@@ -132,7 +133,7 @@ export async function getDownloadSpeed(host) {
                     console.log(`download doneTime: ${doneTime}`);
 
                     client.end();
-                    done(8 * 10 * 1024 / (doneTime - startTime) * 1000);
+                    done(roundDecimal(8 * 10 * 1024 / (doneTime - startTime) * 1000, 2));
                   });
                 }
               });
@@ -154,22 +155,22 @@ export async function getDownloadSpeed(host) {
 
 export function traceRoute(host, ttlOrOptions, cb) {
   const session = ping.createSession();
-  const traceArr = [];
+  let trace = '';
   session.traceRoute(host, ttlOrOptions, (error, target, ttl, sent, rcvd) => {
     const ms = rcvd - sent;
     if (error) {
       if (error instanceof ping.TimeExceededError) {
-        traceArr.push(`${target} : ${error.source} (ttl=${ttl} ms=${ms})`);
+        trace += `${error.source} ttl=${ttl} ms=${ms} `;
       } else {
-        traceArr.push(`${target} : ${error.toString()} (ttl=${ttl} ms=${ms})`);
+        trace += `${error.toString()} ttl=${ttl} ms=${ms} `;
       }
     } else {
-      traceArr.push(`${target} : ${target} (ttl=${ttl} ms=${ms})`);
+      trace += `${target} ttl=${ttl} ms=${ms} `;
     }
   }, (error, target) => {
     if (error) {
-      traceArr.push(`${target} : ${error.toString()}`);
+      trace += `${error.toString()}`;
     }
-    cb(traceArr);
+    cb(trace);
   });
 }

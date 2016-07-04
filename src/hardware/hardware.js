@@ -1,3 +1,5 @@
+import { roundDecimal } from '../util/format';
+
 function benchmark(callback) {
   let score = 0;
   const loop = setInterval(() => {
@@ -6,7 +8,7 @@ function benchmark(callback) {
 
   setTimeout(() => {
     clearInterval(loop);
-    callback(score);
+    callback(roundDecimal(score, 2));
   }, 10000);
 }
 

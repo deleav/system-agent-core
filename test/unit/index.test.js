@@ -153,7 +153,7 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it.only('get osx hardware info', async(done) => {
+  it('get osx hardware info', async(done) => {
     try {
       const result = await systemAgentCore.getHardwareInfo();
       console.log(result);

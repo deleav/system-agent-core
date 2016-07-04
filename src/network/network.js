@@ -76,7 +76,7 @@ export async function getUploadSpeed(host) {
             fs.stat(`${__dirname}/../../test10MB`, (err) => {
               if (err) {
                 if (err.code === 'ENOENT') {
-                  fs.writeFile(`${__dirname}/../../test10MB`, new Buffer(1024 * 1024 * 10), () => {
+                  fs.writeFile(`${__dirname}/../../test10MB`, new Buffer(1024 * 1024 * 3), () => {
                     client.on('ready', () => {
                       client.delete(ulConfig.dest, (err) => {
                         client.list(ulConfig.folder, (err, list) => {

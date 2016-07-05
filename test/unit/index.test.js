@@ -85,7 +85,7 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it('test ftp module', async(done) => {
+  it.skip('test ftp module', async(done) => {
     try {
       const client = new Client();
       client.connect({

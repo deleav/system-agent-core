@@ -7,42 +7,54 @@ import { roundDecimal } from '../util/format';
 const { ulConfig, dlConfig } = config;
 
 export function getPingByRemoteHost(host, cb) {
-  const session = ping.createSession({
-    networkProtocol: ping.NetworkProtocol.IPv4,
-    packetSize: 16,
-    retries: 1,
-    sessionId: (process.pid % 65535),
-    timeout: 500,
-    ttl: 128,
-  });
-  session.pingHost(host, (error, target, sent, rcvd) => {
-    const ms = rcvd - sent;
-    if (error) {
-      cb(9999, error.toString());
-    } else {
-      cb(ms);
-    }
-  });
+  try {
+    const session = ping.createSession({
+      networkProtocol: ping.NetworkProtocol.IPv4,
+      packetSize: 16,
+      retries: 1,
+      sessionId: (process.pid % 65535),
+      timeout: 500,
+      ttl: 128,
+    });
+    session.pingHost(host, (error, target, sent, rcvd) => {
+      const ms = rcvd - sent;
+      if (error) {
+        cb(9999, error.toString());
+      } else {
+        cb(ms);
+      }
+    });
+  } catch (e) {
+    cb(9999, 'permissionsDenied');
+  }
 }
 
 export function pingArray(hostArray, i, newHostArray, cb) {
-  getPingByRemoteHost(hostArray[i].host, (time) => {
-    const newArray = newHostArray;
-    newArray.push({
-      name: hostArray[i].name,
-      host: hostArray[i].host,
-      time,
+  try {
+    getPingByRemoteHost(hostArray[i].host, (time) => {
+      const newArray = newHostArray;
+      newArray.push({
+        name: hostArray[i].name,
+        host: hostArray[i].host,
+        time,
+      });
+      if (newArray.length === hostArray.length) {
+        cb(newArray);
+      } else {
+        pingArray(hostArray, i + 1, newArray, cb);
+      }
     });
-    if (newArray.length === hostArray.length) {
-      cb(newArray);
-    } else {
-      pingArray(hostArray, i + 1, newArray, cb);
-    }
-  });
+  } catch (e) {
+    throw e
+  }
 }
 
 export async function getHostListPing(hostArray, cb) {
-  pingArray(hostArray, 0, [], cb);
+  try {
+    pingArray(hostArray, 0, [], cb);
+  } catch (e) {
+    throw e
+  }
 }
 
 export async function getUploadSpeed(host) {
@@ -57,7 +69,7 @@ export async function getUploadSpeed(host) {
           client.end();
           const doneTime = Math.floor(new Date().getTime());
 
-          done(roundDecimal(8 * 10 * 1024 / (doneTime - startTime) * 1000, 2));
+          done(roundDecimal(8 * 1 * 1024 / (doneTime - startTime) * 1000, 2));
         }
       });
     });
@@ -76,7 +88,7 @@ export async function getUploadSpeed(host) {
             fs.stat(`${__dirname}/../../test10MB`, (err) => {
               if (err) {
                 if (err.code === 'ENOENT') {
-                  fs.writeFile(`${__dirname}/../../test10MB`, new Buffer(1024 * 1024 * 3), () => {
+                  fs.writeFile(`${__dirname}/../../test10MB`, new Buffer(1024 * 1024 * 1), () => {
                     client.on('ready', () => {
                       client.delete(ulConfig.dest, (err) => {
                         client.list(ulConfig.folder, (err, list) => {
@@ -104,13 +116,14 @@ export async function getUploadSpeed(host) {
 
     return await uploadFile();
   } catch (e) {
-    throw e;
+    return 'permissionsDenied';
+    // throw e;
   }
 }
 
 export async function getDownloadSpeed(host) {
-  const client = new Client();
   try {
+    const client = new Client();
     client.connect({
       host: host || dlConfig.host,
       user: dlConfig.user,
@@ -133,7 +146,7 @@ export async function getDownloadSpeed(host) {
                     console.log(`download doneTime: ${doneTime}`);
 
                     client.end();
-                    done(roundDecimal(8 * 10 * 1024 / (doneTime - startTime) * 1000, 2));
+                    done(roundDecimal(8 * 3 * 1024 / (doneTime - startTime) * 1000, 2));
                   });
                 }
               });
@@ -149,28 +162,32 @@ export async function getDownloadSpeed(host) {
 
     return await downloadFile();
   } catch (e) {
-    throw e;
+    return 'permissionsDenied';
   }
 }
 
 export function traceRoute(host, ttlOrOptions, cb) {
-  const session = ping.createSession();
-  let trace = '';
-  session.traceRoute(host, ttlOrOptions, (error, target, ttl, sent, rcvd) => {
-    const ms = rcvd - sent;
-    if (error) {
-      if (error instanceof ping.TimeExceededError) {
-        trace += `${error.source} ttl=${ttl} ms=${ms} `;
+  try {
+    const session = ping.createSession();
+    let trace = '';
+    session.traceRoute(host, ttlOrOptions, (error, target, ttl, sent, rcvd) => {
+      const ms = rcvd - sent;
+      if (error) {
+        if (error instanceof ping.TimeExceededError) {
+          trace += `${error.source} ttl=${ttl} ms=${ms} `;
+        } else {
+          trace += `${error.toString()} ttl=${ttl} ms=${ms} `;
+        }
       } else {
-        trace += `${error.toString()} ttl=${ttl} ms=${ms} `;
+        trace += `${target} ttl=${ttl} ms=${ms} `;
       }
-    } else {
-      trace += `${target} ttl=${ttl} ms=${ms} `;
-    }
-  }, (error, target) => {
-    if (error) {
-      trace += `${error.toString()}`;
-    }
-    cb(trace);
-  });
+    }, (error, target) => {
+      if (error) {
+        trace += `${error.toString()}`;
+      }
+      cb(trace);
+    });
+  } catch (e) {
+    cb('permissionsDenied');
+  }
 }

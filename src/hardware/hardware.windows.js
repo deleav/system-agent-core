@@ -24,13 +24,13 @@ export async function getHardwareInfo() {
         sizeArray,
         speedArray,
       ] = await Promise.all([
-        wmicArray(tableName, 'FormFactor'),
+        wmicArray(tableName, 'Capacity'),
         wmicArray(tableName, 'Speed'),
       ]);
 
       const result = sizeArray.map((info, i) => {
         return {
-          size: `${sizeArray[i]}`,
+          size: `${sizeArray[i] / 1024 / 1024 / 1024}`,
           type: null,
           speed: `${speedArray[i]}`,
           status: 'OK',

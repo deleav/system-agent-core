@@ -1,5 +1,7 @@
 import SystemAgentCore from '../../src';
 import os from 'os';
+import Client from 'ftp';
+var JSFtp = require("jsftp");
 
 describe('systemAgentCore', () => {
   let systemAgentCore = null;
@@ -62,17 +64,60 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it.only('should upload fail', async(done) => {
+  it('test jsftp module', async(done) => {
     try {
-      const result = await systemAgentCore.getUploadSpeed();
-      console.log(`${result}`);
-      done();
+      const jsftp = new JSFtp({
+        host: '139.162.20.180',
+        user: 'deploy',
+        pass: 'ts22019020',
+      });
+
+      jsftp.ls("./uploads", function(err, res) {
+        console.log(err, res);
+        jsftp.put(new Buffer(1024 * 1024 * 10), 'uploads/test10MB', function(hadError) {
+          if (!hadError)
+            console.log("File transferred successfully!");
+          done()
+        });
+      });
     } catch (e) {
       done(e);
     }
   });
 
-  it.skip('should get download speed', async(done) => {
+  it.skip('test ftp module', async(done) => {
+    try {
+      const client = new Client();
+      client.connect({
+      });
+      client.list('uploads', (err, list) => {
+        if (err) {
+          done(err.toString());
+        } else {
+          console.log(list);
+
+          client.end();
+            done()
+        }
+      });
+    } catch (e) {
+      done(e);
+    }
+  });
+
+
+  it('should upload fail', async(done) => {
+    try {
+      const result = await systemAgentCore.getUploadSpeed();
+      console.log(`${result}`);
+      done();
+    } catch (e) {
+      console.log(e);
+      done(e);
+    }
+  });
+
+  it('should get download speed', async(done) => {
     try {
       const result = await systemAgentCore.getDownloadSpeed();
       console.log(`download speed: ${result} Kbps`);

@@ -60,19 +60,27 @@ export async function getHostListPing(hostArray, cb) {
 export async function getUploadSpeed(host) {
   const client = new Client();
   const startUpload = (done, err) => {
-    const startTime = Math.floor(new Date().getTime());
-    client.put(`${__dirname}/../../test10MB`, ulConfig.dest, (err, list) => {
-      client.list(ulConfig.folder, (err, list) => {
+    if (err) {
+      done('error');
+    } else {
+      const startTime = Math.floor(new Date().getTime());
+      client.put(`${__dirname}/../../test10MB`, ulConfig.dest, (err, list) => {
         if (err) {
-          done(err.toString());
+          done('error');
         } else {
-          client.end();
-          const doneTime = Math.floor(new Date().getTime());
+          client.list(ulConfig.folder, (err, list) => {
+            if (err) {
+              done(err.toString());
+            } else {
+              client.end();
+              const doneTime = Math.floor(new Date().getTime());
 
-          done(roundDecimal(8 * 1 * 1024 / (doneTime - startTime) * 1000, 2));
+              done(roundDecimal(8 * 1 * 1024 / (doneTime - startTime) * 1000, 2));
+            }
+          });
         }
       });
-    });
+    }
   };
   try {
     client.connect({
@@ -91,9 +99,13 @@ export async function getUploadSpeed(host) {
                   fs.writeFile(`${__dirname}/../../test10MB`, new Buffer(1024 * 1024 * 1), () => {
                     client.on('ready', () => {
                       client.delete(ulConfig.dest, (err) => {
-                        client.list(ulConfig.folder, (err, list) => {
-                          startUpload(done, err, list);
-                        });
+                        if (err) {
+                          done('error');
+                        } else {
+                          client.list(ulConfig.folder, (err, list) => {
+                            startUpload(done, err, list);
+                          });
+                        }
                       });
                     });
                   });

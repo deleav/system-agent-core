@@ -4,12 +4,20 @@ import networkService from './network';
 import * as errMsgService from './error';
 import * as reportService from './util/report';
 import * as configService from './util/config';
+import config from './config';
+let logger;
+if (config.env === 'development') {
+  logger = require('tracer').colorConsole();
+} else {
+  logger = console;
+}
 
 export default class systemAgentCore {
 
   constructor({ ostype }) {
     // ostype: OSX, WINDOWS
     this.OSTYPE = ostype;
+    global.logger = logger;
   }
 
   greet() {

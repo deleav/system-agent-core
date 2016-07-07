@@ -2,6 +2,7 @@ import SystemAgentCore from '../../src';
 import os from 'os';
 import Client from 'ftp';
 var JSFtp = require("jsftp");
+import axios from 'axios';
 
 describe('systemAgentCore', () => {
   let systemAgentCore = null;
@@ -272,6 +273,30 @@ describe('systemAgentCore', () => {
       const result = await systemAgentCore.getConfig();
       result.should.has.keys('ad', 'testServer', 'report', 'debug');
       console.log(result);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
+  it.only('get network info', async(done) => {
+    try {
+      const result = await systemAgentCore.getNetworkInfo();
+      // result.should.has.keys('ad', 'testServer', 'report', 'debug');
+      console.log('getNetworkInfo=>', result);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
+  it('get public ip', async(done) => {
+    try {
+      const result = await systemAgentCore.getPublicIp([
+        'https://github.com/mzabriskie/axios',
+      ]);
+      console.log("your public ip =>", result);
+
       done();
     } catch (e) {
       done(e);

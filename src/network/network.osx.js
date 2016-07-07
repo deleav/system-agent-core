@@ -1,7 +1,6 @@
 import { exec } from 'child-process-promise';
 import ifconfig from 'ifconfig';
 
-
 export async function getNetworkHardwareInfo() {
   const cmd = 'networksetup -listallhardwareports';
   const result = await exec(cmd);
@@ -41,7 +40,7 @@ export async function getNetworkHardwareInfo() {
 export async function getNetworkInfo() {
   try {
     const result = {
-      networkSetup: await getNetworkHardwareInfo(),
+      networkSetup: await getNetworkHardwareInfo()
     };
     return result;
   } catch (e) {

@@ -4,6 +4,7 @@ import config from '../config';
 import fs from 'fs';
 import { roundDecimal } from '../util/format';
 import speedTest from 'speedtest-net';
+import axios from 'axios';
 
 const { ulConfig, dlConfig } = config;
 
@@ -227,3 +228,49 @@ export function traceRoute(host, ttlOrOptions, cb) {
     cb('permissionsDenied');
   }
 }
+
+export async function getPublicIp(providers) {
+  let publicIp;
+  try {
+    const ipApis = [
+      'http://ipv4bot.whatismyipaddress.com/',
+      'http://api.ipify.org/',
+      'http://ip-api.com/json',
+    ];
+    ipApis.push(...providers);
+    console.log('providers =>', providers);
+    console.log('ipApis =>', ipApis);
+
+    const results = [];
+    // get user's public ip from providers
+    for (const api of ipApis) {
+      const result = await axios.get(api);
+      if (typeof result.data === 'object') {
+        results.push(result.data.query);
+      } else if (typeof result.data !== 'undefined') {
+        results.push(result.data);
+      }
+    }
+
+    let count = 0;
+    const trustThreshold = Math.ceil((ipApis.length - 1) / 2);
+    // check ip usable by compare each provider's return data.
+    for (const ip of results) {
+      if (typeof ip === 'string') {
+        const length = ip.split('.').length;
+        if (length === 4) {
+          publicIp = ip;
+          count++;
+        }
+      }
+      console.log('ip=>', ip, 'count=>', count);
+    }
+    console.log('trustThreshold =>', trustThreshold, 'final count=>', count);
+
+    if (count < trustThreshold) publicIp = results;
+    return publicIp;
+  } catch (e) {
+    console.log('getPublicIp error=>', e);
+    return e;
+  }
+} // end getPublicIp

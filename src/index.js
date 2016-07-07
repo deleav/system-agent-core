@@ -71,4 +71,8 @@ export default class systemAgentCore {
   async getConfig() {
     return configService.getConfig();
   }
+
+  async getPublicIp(provider) {
+    return await networkService[this.OSTYPE].getPublicIp(provider);
+  }
 }

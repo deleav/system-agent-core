@@ -63,14 +63,20 @@ export default class systemAgentCore {
   }
 
   getPingByRemoteHost(host, cb) {
-    logger.info('getPingByRemoteHost');
+    logger.info('getPingByRemoteHost', host);
     return networkService[this.OSTYPE].getPingByRemoteHost(host, cb);
   }
 
   async getHostListPing(hostArray, cb) {
-    logger.info('getHostListPing');
+    logger.info('getHostListPing', hostArray);
     return networkService[this.OSTYPE].getHostListPing(hostArray, cb);
   }
+
+  // async getSpeed(host, cb) {
+  //   const speed = await networkService[this.OSTYPE].getSpeed(host);
+  //   logger.info(speed);
+  //   return speed
+  // }
 
   async getUploadSpeed(host) {
     const uploadSpeed = await networkService[this.OSTYPE].getUploadSpeed(host);
@@ -85,7 +91,7 @@ export default class systemAgentCore {
   }
 
   traceRoute(host, ttlOrOptions, cb) {
-    logger.info('traceRoute');
+    logger.info('traceRoute',host, ttlOrOptions);
     return networkService[this.OSTYPE].traceRoute(host, ttlOrOptions, cb);
   }
 
@@ -98,13 +104,13 @@ export default class systemAgentCore {
   }
 
   async exportReport(info) {
-    logger.info('exportReport');
+    logger.info('exportReport', info);
     return await reportService.exportReport(info);
   }
 
   async getConfig() {
     const config = await configService.getConfig();
     logger.info(config);
-    return config
+    return config;
   }
 }

@@ -219,10 +219,11 @@ export function traceRoute(host, ttlOrOptions, cb) {
     session.traceRoute(host, ttlOrOptions, (error, target, ttl, sent, rcvd) => {
       const ms = rcvd - sent;
       if (error) {
-        logger.error(error);
         if (error instanceof ping.TimeExceededError) {
+          logger.info(error);
           trace += `${error.source} ttl=${ttl} ms=${ms} `;
         } else {
+          logger.error(error);
           trace += `${error.toString()} ttl=${ttl} ms=${ms} `;
         }
       } else {

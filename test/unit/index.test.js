@@ -178,7 +178,7 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it('export report file by system info', async(done) => {
+  it.skip('export report file by system info', async(done) => {
     try {
       const src = {
         cpuBenchmark: '48255.59',
@@ -267,7 +267,7 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it('get server config', async(done) => {
+  it.skip('get server config', async(done) => {
     try {
       const result = await systemAgentCore.getConfig();
       result.should.has.keys('ad', 'testServer', 'report', 'debug');

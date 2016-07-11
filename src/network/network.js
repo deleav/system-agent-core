@@ -20,12 +20,15 @@ export function getPingByRemoteHost(host, cb) {
     session.pingHost(host, (error, target, sent, rcvd) => {
       const ms = rcvd - sent;
       if (error) {
+        logger.error(error);
         cb(9999, error.toString());
       } else {
+        logger.info(ms);
         cb(ms);
       }
     });
   } catch (e) {
+    logger.error(e);
     cb(9999, 'permissionsDenied');
   }
 }
@@ -34,18 +37,22 @@ export function pingArray(hostArray, i, newHostArray, cb) {
   try {
     getPingByRemoteHost(hostArray[i].host, (time) => {
       const newArray = newHostArray;
-      newArray.push({
+      const info = {
         name: hostArray[i].name,
         host: hostArray[i].host,
         time,
-      });
+      };
+      newArray.push(info);
       if (newArray.length === hostArray.length) {
+        logger.info('pingArray finish');
         cb(newArray);
       } else {
+        logger.info(info);
         pingArray(hostArray, i + 1, newArray, cb);
       }
     });
   } catch (e) {
+    logger.error(e);
     throw e
   }
 }
@@ -54,6 +61,7 @@ export async function getHostListPing(hostArray, cb) {
   try {
     pingArray(hostArray, 0, [], cb);
   } catch (e) {
+    logger.error(e);
     throw e
   }
 }
@@ -137,6 +145,7 @@ export async function getUploadSpeed(host) {
     };
     return await speedTestUpload();
   } catch (e) {
+    logger.error(e);
     return 'permissionsDenied';
     // throw e;
   }
@@ -198,6 +207,7 @@ export async function getDownloadSpeed(host) {
     };
     return await speedTestDownload();
   } catch (e) {
+    logger.error(e);
     return 'permissionsDenied';
   }
 }
@@ -209,21 +219,25 @@ export function traceRoute(host, ttlOrOptions, cb) {
     session.traceRoute(host, ttlOrOptions, (error, target, ttl, sent, rcvd) => {
       const ms = rcvd - sent;
       if (error) {
+        logger.error(error);
         if (error instanceof ping.TimeExceededError) {
           trace += `${error.source} ttl=${ttl} ms=${ms} `;
         } else {
           trace += `${error.toString()} ttl=${ttl} ms=${ms} `;
         }
       } else {
+        logger.info(target, ttl, sent, rcvd);
         trace += `${target} ttl=${ttl} ms=${ms} `;
       }
     }, (error, target) => {
       if (error) {
+        logger.error(error);
         trace += `${error.toString()}`;
       }
       cb(trace);
     });
   } catch (e) {
+    logger.error(e);
     cb('permissionsDenied');
   }
 }

@@ -72,11 +72,10 @@ export default class systemAgentCore {
     return networkService[this.OSTYPE].getHostListPing(hostArray, cb);
   }
 
-  // async getSpeed(host, cb) {
-  //   const speed = await networkService[this.OSTYPE].getSpeed(host);
-  //   logger.info(speed);
-  //   return speed
-  // }
+  getSpeed(host, cb) {
+    logger.info('getSpeed', host);
+    networkService[this.OSTYPE].getSpeed(host, cb);
+  }
 
   async getUploadSpeed(host) {
     const uploadSpeed = await networkService[this.OSTYPE].getUploadSpeed(host);

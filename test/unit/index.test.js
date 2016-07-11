@@ -128,6 +128,19 @@ describe('systemAgentCore', () => {
     }
   });
 
+  it('should call back network speed', (done) => {
+    systemAgentCore.getSpeed('172.217.25.99', (result) => {
+      console.log('network: \n', result);
+
+      try {
+        result.should.has.keys('download', 'upload', 'clientIP', 'ping', 'downloadError', 'uploadError');
+        done();
+      } catch (e) {
+        done(e);
+      }
+    });
+  });
+
   it('should trace route', (done) => {
     systemAgentCore.traceRoute('172.217.25.99', 30, (result) => {
       console.log('trace route: \n', result);
@@ -153,7 +166,7 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it.only('get osx hardware info', async(done) => {
+  it('get osx hardware info', async(done) => {
     try {
       const result = await systemAgentCore.getHardwareInfo();
       console.log(result);

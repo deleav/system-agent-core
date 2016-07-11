@@ -5,7 +5,7 @@ export async function exportReport(json) {
     await axios.post(`${config.domain}/report`, json);
     return true;
   } catch (e) {
-    console.log(e);
+    logger.error(e);
     return false;
   }
 }

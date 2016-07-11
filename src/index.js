@@ -1,3 +1,4 @@
+import fs from 'fs';
 import hardwareService from './hardware';
 import softwareService from './software';
 import networkService from './network';
@@ -9,7 +10,15 @@ let logger;
 if (config.env === 'development') {
   logger = require('tracer').colorConsole();
 } else {
-  logger = console;
+  logger = require('tracer').console({
+    transport: [
+      function(data) {
+        fs.appendFile(`${__dirname}/../error.log`, `level:${data.level}\n${JSON.stringify(data)}\n`, (err) => {
+          if (err) throw err;
+        });
+      }
+    ]
+  });
 }
 
 export default class systemAgentCore {
@@ -25,42 +34,64 @@ export default class systemAgentCore {
   }
 
   async getOSInfo() {
-    return await softwareService[this.OSTYPE].getOSInfo();
+    const osInfo = await softwareService[this.OSTYPE].getOSInfo();
+    logger.info(osInfo);
+    return osInfo;
   }
 
   async getHardwareInfo() {
-    return await hardwareService[this.OSTYPE].getHardwareInfo();
+    const hardwareInfo = await hardwareService[this.OSTYPE].getHardwareInfo();
+    logger.info(hardwareInfo);
+    return hardwareInfo
   }
 
   getCpuBenchmark(callback) {
+    logger.info('getCpuBenchmark');
     return hardwareService[this.OSTYPE].getCpuBenchmark(callback);
   }
 
   async getSoftwareInfo() {
-    return await softwareService[this.OSTYPE].getSoftwareInfo();
+    const softwareInfo = await softwareService[this.OSTYPE].getSoftwareInfo();
+    logger.info(softwareInfo);
+    return softwareInfo;
   }
 
   async getNetworkInfo() {
-    return networkService[this.OSTYPE].getNetworkInfo();
+    const networkInfo = networkService[this.OSTYPE].getNetworkInfo();
+    logger.info(networkInfo);
+    return networkInfo;
   }
 
   getPingByRemoteHost(host, cb) {
+    logger.info('getPingByRemoteHost', host);
     return networkService[this.OSTYPE].getPingByRemoteHost(host, cb);
   }
 
   async getHostListPing(hostArray, cb) {
+    logger.info('getHostListPing', hostArray);
     return networkService[this.OSTYPE].getHostListPing(hostArray, cb);
   }
 
+  // async getSpeed(host, cb) {
+  //   const speed = await networkService[this.OSTYPE].getSpeed(host);
+  //   logger.info(speed);
+  //   return speed
+  // }
+
   async getUploadSpeed(host) {
-    return networkService[this.OSTYPE].getUploadSpeed(host);
+    const uploadSpeed = await networkService[this.OSTYPE].getUploadSpeed(host);
+    logger.info(uploadSpeed);
+    return uploadSpeed
   }
 
   async getDownloadSpeed(host) {
-    return networkService[this.OSTYPE].getDownloadSpeed(host);
+    const downloadSpeed = await networkService[this.OSTYPE].getDownloadSpeed(host);
+    logger.info(downloadSpeed);
+    return downloadSpeed
   }
 
   traceRoute(host, ttlOrOptions, cb) {
+    logger.info('traceRoute',host, ttlOrOptions);
     return networkService[this.OSTYPE].traceRoute(host, ttlOrOptions, cb);
   }
 
@@ -73,10 +104,13 @@ export default class systemAgentCore {
   }
 
   async exportReport(info) {
+    logger.info('exportReport', info);
     return await reportService.exportReport(info);
   }
 
   async getConfig() {
-    return configService.getConfig();
+    const config = await configService.getConfig();
+    logger.info(config);
+    return config;
   }
 }

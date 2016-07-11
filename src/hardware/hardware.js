@@ -8,6 +8,7 @@ function benchmark(callback) {
 
   setTimeout(() => {
     clearInterval(loop);
+    logger.info(score);
     callback(roundDecimal(score, 2));
   }, 10000);
 }

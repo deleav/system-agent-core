@@ -6,26 +6,26 @@ import * as errMsgService from './error';
 import * as reportService from './util/report';
 import * as configService from './util/config';
 import config from './config';
-let logger;
-if (config.env === 'development') {
-  logger = require('tracer').colorConsole();
-} else {
-  logger = require('tracer').console({
-    transport: [
-      function(data) {
-        fs.appendFile(`${__dirname}/../error.log`, `level:${data.level}\n${JSON.stringify(data)}\n`, (err) => {
-          if (err) throw err;
-        });
-      }
-    ]
-  });
-}
 
 export default class systemAgentCore {
 
-  constructor({ ostype }) {
+  constructor({ ostype, logPath }) {
     // ostype: OSX, WINDOWS
     this.OSTYPE = ostype;
+    let logger;
+    if (config.env === 'development') {
+      logger = require('tracer').colorConsole();
+    } else {
+      logger = require('tracer').console({
+        transport: [
+          function(data) {
+            fs.appendFile(logPath || `${__dirname}/../error.log`, `level:${data.level}\n${JSON.stringify(data)}\n`, (err) => {
+              if (err) throw err;
+            });
+          }
+        ]
+      });
+    }
     global.logger = logger;
   }
 

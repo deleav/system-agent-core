@@ -106,7 +106,7 @@ export async function getSoftwareInfo() {
       flash: await getFlashVersion(),
       ie: await getIEVersion(),
       firefox: await getFireFoxVersion(),
-      360: await get360Version(),
+      browser360: await get360Version(),
     };
 
     return result;

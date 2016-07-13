@@ -67,6 +67,8 @@ export async function regex(device, platform, target) {
   try {
     if (platform === 'OSX') {
       await regexMac(device, platform, target);
+    } else {
+      await regexWindows(device, platform, target);
     }
   } catch (e) {
     logger.error(e);

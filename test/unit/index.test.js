@@ -29,11 +29,11 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it('should get software info', async (done) => {
+  it.only('should get software info', async (done) => {
     try {
       const result = await systemAgentCore.getSoftwareInfo();
       console.log(result);
-      result.should.has.keys('safari', 'chrome', 'flash', 'ie', 'firefox', '360');
+      result.should.has.keys('safari', 'chrome', 'flash', 'ie', 'firefox', 'browser360', 'opera');
 
       done();
     } catch (e) {
@@ -166,7 +166,7 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it.only('get osx hardware info', async(done) => {
+  it('get osx hardware info', async(done) => {
     try {
       const result = await systemAgentCore.getHardwareInfo();
       console.log(result);

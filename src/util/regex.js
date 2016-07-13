@@ -23,7 +23,6 @@ export async function regexMac(device, platform, target) {
           });
       }
     }
-    console.log(result);
     return result;
   } catch (e) {
     logger.error(e);
@@ -55,7 +54,6 @@ export async function regexWindows(device, platform, target) {
           });
       }
     }
-    console.log(result);
     return result;
   } catch (e) {
     logger.error(e);

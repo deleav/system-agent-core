@@ -22,6 +22,19 @@ export async function getOSInfo() {
 
 export async function getSoftwareInfo() {
   try {
+
+    const getOperaVersion = async () => {
+      try {
+        const cmd = '/Applications/Opera.app/Contents/MacOS/Opera --version';
+        const cmdResult = await exec(cmd);
+        const str = cmdResult.stdout.replace('\n', '');
+        return str;
+      } catch (e) {
+        logger.error(e);
+        return 'notFound';
+      }
+    };
+
     const getSafariVersion = async () => {
       let cmd = '';
       cmd = 'defaults read /Applications/Safari.app/Contents/version CFBundleShortVersionString';
@@ -77,6 +90,7 @@ export async function getSoftwareInfo() {
       ie: null,
       firefox: await getFirfoxVersion(),
       browser360: null,
+      opera: await getOperaVersion(),
     };
 
     return result;

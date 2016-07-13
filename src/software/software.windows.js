@@ -70,6 +70,16 @@ export async function getSoftwareInfo() {
       return result;
     };
 
+    const getOperaVersion = async () => {
+      const cmd = 'REG QUERY HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall | findstr Opera';
+      const regQuery = await exec(cmd);
+      const str = regQuery.stdout;
+      const objRE = new RegExp('Opera (.*)', 'g');
+      const match = str.match(objRE);
+      const result = match[1];
+      return result;
+    };
+
     const getFireFoxVersion = async () => {
       try {
         const cmd = ' reg query "HKEY_LOCAL_MACHINE\\Software\\Mozilla\\Mozilla Firefox" /v CurrentVersion';
@@ -107,6 +117,7 @@ export async function getSoftwareInfo() {
       ie: await getIEVersion(),
       firefox: await getFireFoxVersion(),
       browser360: await get360Version(),
+      opera: await getOperaVersion(),
     };
 
     return result;

@@ -5,13 +5,15 @@ import networkService from './network';
 import * as errMsgService from './error';
 import * as reportService from './util/report';
 import * as configService from './util/config';
+import * as apiService from './util/callApi';
 import config from './config';
 
 export default class systemAgentCore {
 
-  constructor({ ostype, logPath }) {
+  constructor({ ostype, logPath, apiConfig }) {
     // ostype: OSX, WINDOWS
     this.OSTYPE = ostype;
+    this.apiConfig = apiConfig;
     let logger;
     if (config.env === 'development') {
       logger = require('tracer').colorConsole();
@@ -111,5 +113,12 @@ export default class systemAgentCore {
     const config = await configService.getConfig();
     logger.info(config);
     return config;
+  }
+
+  async callApi(api, extraOption) {
+    const option = this.apiConfig[api];
+    const result = await apiService.callApi({ ...option, ...extraOption });
+    // logger.info(result);
+    return result;
   }
 }

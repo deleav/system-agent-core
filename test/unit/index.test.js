@@ -128,7 +128,7 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it.only('should call back network speed', (done) => {
+  it('should call back network speed', (done) => {
     systemAgentCore.getSpeed('172.217.25.99', (result) => {
       console.log('network: \n', result);
 

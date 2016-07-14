@@ -3,7 +3,7 @@ import apiConfig from '../../src/config/api';
 import os from 'os';
 import fs from 'fs';
 
-describe.only('systemAgentCore api', () => {
+describe('systemAgentCore api', () => {
   let systemAgentCore = null;
   beforeEach(() => {
     if (os.type() === 'Darwin') {

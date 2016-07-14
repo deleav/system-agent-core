@@ -1,20 +1,30 @@
 import SystemAgentCore from '../../src';
 import os from 'os';
-import Client from 'ftp';
-var JSFtp = require("jsftp");
+import apiConfig from '../../src/config/api';
 
 describe('systemAgentCore', () => {
   let systemAgentCore = null;
-  beforeEach(() => {
-    if (os.type() === 'Darwin') {
-      // Darwin 是 node 上的 OSX 代號
-      systemAgentCore = new SystemAgentCore({
-        ostype: 'OSX',
-      });
-    } else {
-      systemAgentCore = new SystemAgentCore({
-        ostype: 'WINDOWS',
-      });
+  let config;
+  before(async(done) => {
+    try {
+      if (os.type() === 'Darwin') {
+        // Darwin 是 node 上的 OSX 代號
+        systemAgentCore = new SystemAgentCore({
+          ostype: 'OSX',
+          apiConfig,
+        });
+      } else {
+        systemAgentCore = new SystemAgentCore({
+          ostype: 'WINDOWS',
+          apiConfig,
+        });
+      }
+      config = await systemAgentCore.callApi('config');
+      logger.info(config);
+      done()
+    } catch (e) {
+      logger.error(e);
+      done(e)
     }
   });
 
@@ -55,71 +65,20 @@ describe('systemAgentCore', () => {
 
   it('should get upload speed', async(done) => {
     try {
-      const result = await systemAgentCore.getUploadSpeed();
-      console.log(`upload speed: ${result} Kbps`);
+      const testServer = config.testServer[0];
+      const result = await systemAgentCore.getUploadSpeed(testServer.uploadTest);
+      console.log(`upload speed: ${result} Mbps`);
 
       done();
     } catch (e) {
-      done(e);
-    }
-  });
-
-  it('test jsftp module', async(done) => {
-    try {
-      const jsftp = new JSFtp({
-        host: '139.162.20.180',
-        user: 'deploy',
-        pass: 'ts22019020',
-      });
-
-      jsftp.ls("./uploads", function(err, res) {
-        console.log(err, res);
-        jsftp.put(new Buffer(1024 * 1024 * 10), 'uploads/test10MB', function(hadError) {
-          if (!hadError)
-            console.log("File transferred successfully!");
-          done()
-        });
-      });
-    } catch (e) {
-      done(e);
-    }
-  });
-
-  it.skip('test ftp module', async(done) => {
-    try {
-      const client = new Client();
-      client.connect({
-      });
-      client.list('uploads', (err, list) => {
-        if (err) {
-          done(err.toString());
-        } else {
-          console.log(list);
-
-          client.end();
-            done()
-        }
-      });
-    } catch (e) {
-      done(e);
-    }
-  });
-
-
-  it('should upload fail', async(done) => {
-    try {
-      const result = await systemAgentCore.getUploadSpeed();
-      console.log(`${result}`);
-      done();
-    } catch (e) {
-      console.log(e);
       done(e);
     }
   });
 
   it('should get download speed', async(done) => {
     try {
-      const result = await systemAgentCore.getDownloadSpeed();
+      const testServer = config.testServer[0];
+      const result = await systemAgentCore.getDownloadSpeed(testServer.downloadTest);
       console.log(`download speed: ${result} Kbps`);
 
       done();
@@ -128,17 +87,15 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it('should call back network speed', (done) => {
-    systemAgentCore.getSpeed('172.217.25.99', (result) => {
-      console.log('network: \n', result);
-
-      try {
-        result.should.has.keys('download', 'upload', 'clientIP', 'ping', 'downloadError', 'uploadError');
-        done();
-      } catch (e) {
-        done(e);
-      }
-    });
+  it.only('should call back network speed', async(done) => {
+    try {
+      const testServer = config.testServer[0];
+      const result = await systemAgentCore.getSpeed(testServer);
+      result.should.has.keys('download', 'upload', 'clientIP', 'ping', 'downloadError', 'uploadError');
+      done();
+    } catch (e) {
+      done(e);
+    }
   });
 
   it('should trace route', (done) => {
@@ -151,19 +108,6 @@ describe('systemAgentCore', () => {
         done(e);
       }
     });
-  });
-
-  it.skip('call teamview', async(done) => {
-    try {
-      const teamviewPath = `${__dirname}/../assets/osx/TeamViewerQS.app`;
-      const result = await systemAgentCore.callTeamview({
-        teamviewPath,
-      });
-      result.success.should.be.equal(true);
-      done();
-    } catch (e) {
-      done(e);
-    }
   });
 
   it('get osx hardware info', async(done) => {

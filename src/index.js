@@ -7,6 +7,7 @@ import * as reportService from './util/report';
 import * as configService from './util/config';
 import * as apiService from './util/callApi';
 import config from './config';
+import { roundDecimal } from './util/format';
 
 export default class systemAgentCore {
 
@@ -33,6 +34,12 @@ export default class systemAgentCore {
 
   greet() {
     return 'hello';
+  }
+
+  async callApi(api, extraOption) {
+    const option = this.apiConfig[api];
+    const result = await apiService.callApi({ ...option, ...extraOption });
+    return result;
   }
 
   async getOSInfo() {
@@ -74,20 +81,52 @@ export default class systemAgentCore {
     return networkService[this.OSTYPE].getHostListPing(hostArray, cb);
   }
 
-  getSpeed(host, cb) {
-    logger.info('getSpeed', host);
-    networkService[this.OSTYPE].getSpeed(host, cb);
+  async getSpeed(testServer) {
+    logger.info('getSpeed', testServer);
+    // networkService[this.OSTYPE].getSpeed(host, cb);
+    const [
+      download,
+      upload,
+    ] = await Promise.all([
+      this.getDownloadSpeed(testServer.downloadTest),
+      this.getUploadSpeed(testServer.uploadTest),
+    ]);
+    const data = {
+      download,
+      upload,
+      clientIP: '',
+      ping: '',
+      downloadError: '',
+      uploadError: '',
+    };
+    logger.info(data);
+    return data;
   }
 
-  async getUploadSpeed(host) {
-    const uploadSpeed = await networkService[this.OSTYPE].getUploadSpeed(host);
-    logger.info(uploadSpeed);
-    return uploadSpeed
+  async getUploadSpeed(url) {
+    // const uploadSpeed = await networkService[this.OSTYPE].getUploadSpeed(host);
+    const startTime = Math.floor(new Date().getTime());
+    await this.callApi('upload', {
+      url,
+      filePath: 'test10MB',
+    });
+    const doneTime = Math.floor(new Date().getTime());
+    const time = doneTime - startTime;
+    const size = 1048576 / 1024 / 1024 * 8;
+    const uploadSpeed = roundDecimal(size / time * 1000, 2);
+    logger.info(uploadSpeed, size, time);
+    return uploadSpeed;
   }
 
-  async getDownloadSpeed(host) {
-    const downloadSpeed = await networkService[this.OSTYPE].getDownloadSpeed(host);
-    logger.info(downloadSpeed);
+  async getDownloadSpeed(url) {
+    // const downloadSpeed = await networkService[this.OSTYPE].getDownloadSpeed(host);
+    const startTime = Math.floor(new Date().getTime());
+    await this.callApi('download', { url });
+    const doneTime = Math.floor(new Date().getTime());
+    const time = doneTime - startTime;
+    const size = 2011165 / 1024 / 1024 * 8;
+    const downloadSpeed = roundDecimal(size / time * 1000, 2);
+    logger.info(downloadSpeed, size, time);
     return downloadSpeed
   }
 
@@ -100,10 +139,6 @@ export default class systemAgentCore {
     return errMsgService.getMessage(type);
   }
 
-  async callTeamview({ teamviewPath }) {
-    return await softwareService[this.OSTYPE].callTeamview(teamviewPath);
-  }
-
   async exportReport(info) {
     logger.info('exportReport', info);
     return await reportService.exportReport(info);
@@ -113,12 +148,5 @@ export default class systemAgentCore {
     const config = await configService.getConfig();
     logger.info(config);
     return config;
-  }
-
-  async callApi(api, extraOption) {
-    const option = this.apiConfig[api];
-    const result = await apiService.callApi({ ...option, ...extraOption });
-    // logger.info(result);
-    return result;
   }
 }

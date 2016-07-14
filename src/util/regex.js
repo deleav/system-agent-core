@@ -2,7 +2,7 @@ import { exec } from 'child-process-promise';
 import iconv from 'iconv-lite';
 import metadata from '../metadata';
 
-export async function regexMac(device, platform, target) {
+export async function regexMac(platform, device, target) {
   try {
     const list = metadata[platform][device][target];
     const result = [];
@@ -23,6 +23,7 @@ export async function regexMac(device, platform, target) {
           });
       }
     }
+    logger.info(result);
     return result;
   } catch (e) {
     logger.error(e);
@@ -30,7 +31,7 @@ export async function regexMac(device, platform, target) {
   }
 }
 
-export async function regexWindows(device, platform, target) {
+export async function regexWindows(platform, device, target) {
   try {
     const list = metadata[platform][device][target];
     const result = [];
@@ -54,6 +55,7 @@ export async function regexWindows(device, platform, target) {
           });
       }
     }
+    logger.info(result);
     return result;
   } catch (e) {
     logger.error(e);
@@ -61,12 +63,12 @@ export async function regexWindows(device, platform, target) {
   }
 }
 
-export async function regex(device, platform, target) {
+export async function regex(platform, device, target) {
   try {
     if (platform === 'OSX') {
-      await regexMac(device, platform, target);
+      await regexMac(platform, device, target);
     } else {
-      await regexWindows(device, platform, target);
+      await regexWindows(platform, device, target);
     }
   } catch (e) {
     logger.error(e);

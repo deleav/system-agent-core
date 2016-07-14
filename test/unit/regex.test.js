@@ -21,7 +21,7 @@ describe.only('regex', () => {
 
   it('macOS hardware model', async(done) => {
     try {
-      await regex('hardware', platform, 'model');
+      await regex(platform, 'hardware', 'model');
       done();
     } catch (e) {
       done(e);
@@ -30,7 +30,7 @@ describe.only('regex', () => {
 
   it('macOS hardware cpu', async(done) => {
     try {
-      await regex('hardware', platform, 'cpu');
+      await regex(platform, 'hardware', 'cpu');
       done();
     } catch (e) {
       done(e);
@@ -39,7 +39,7 @@ describe.only('regex', () => {
 
   it('macOS hardware ram', async(done) => {
     try {
-      await regex('hardware', platform, 'ram');
+      await regex(platform, 'hardware', 'ram');
       done();
     } catch (e) {
       done(e);
@@ -48,7 +48,7 @@ describe.only('regex', () => {
 
   it('macOS hardware network', async(done) => {
     try {
-      await regex('hardware', platform, 'network');
+      await regex(platform, 'hardware', 'network');
       done();
     } catch (e) {
       done(e);
@@ -57,7 +57,7 @@ describe.only('regex', () => {
 
   it('macOS software safari', async(done) => {
     try {
-      await regex('software', platform, 'safari');
+      await regex(platform, 'software', 'safari');
       done();
     } catch (e) {
       done(e);
@@ -66,7 +66,7 @@ describe.only('regex', () => {
 
   it('macOS software chrome', async(done) => {
     try {
-      await regex('software', platform, 'chrome');
+      await regex(platform, 'software', 'chrome');
       done();
     } catch (e) {
       done(e);
@@ -75,7 +75,7 @@ describe.only('regex', () => {
 
   it('macOS software flash', async(done) => {
     try {
-      await regex('software', platform, 'flash');
+      await regex(platform, 'software', 'flash');
       done();
     } catch (e) {
       done(e);
@@ -84,7 +84,7 @@ describe.only('regex', () => {
 
   it('macOS software ie', async(done) => {
     try {
-      await regex('software', platform, 'ie');
+      await regex(platform, 'software', 'ie');
       done();
     } catch (e) {
       done(e);
@@ -92,7 +92,7 @@ describe.only('regex', () => {
   });
   it('macOS software firefox', async(done) => {
     try {
-      await regex('software', platform, 'firefox');
+      await regex(platform, 'software', 'firefox');
       done();
     } catch (e) {
       done(e);
@@ -100,7 +100,7 @@ describe.only('regex', () => {
   });
   it('macOS software browser360', async(done) => {
     try {
-      await regex('software', platform, 'browser360');
+      await regex(platform, 'software', 'browser360');
       done();
     } catch (e) {
       done(e);

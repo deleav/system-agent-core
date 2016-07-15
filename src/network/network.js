@@ -1,3 +1,4 @@
+import ping from 'net-ping';
 import config from '../config';
 import { roundDecimal } from '../util/format';
 import speedTest from 'speedtest-net';

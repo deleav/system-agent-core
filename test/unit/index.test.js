@@ -28,7 +28,7 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it.only('regexAll', async(done) => {
+  it('regexAll', async(done) => {
     try {
       const data = await systemAgentCore.getAllInfo();
       console.log(data);
@@ -97,7 +97,7 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it.only('should call back network speed', async(done) => {
+  it('should call back network speed', async(done) => {
     try {
       const testServer = config.testServer[0];
       const result = await systemAgentCore.getSpeed(testServer);

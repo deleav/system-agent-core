@@ -92,7 +92,10 @@ export async function regexAll(platform) {
       const result = {};
       // 整理 json
       getDatas.forEach((item) => {
-        result[Object.keys(item)] = item[Object.keys(item)];
+        const key = Object.keys(item);
+        const value = item[Object.keys(item)];
+        // result[key] = value;
+        result[key] = value[0];
       });
       datas[deviceKey] = result;
     }

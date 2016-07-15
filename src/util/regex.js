@@ -90,6 +90,7 @@ export async function regexAll(platform) {
       );
       const getDatas = await Promise.all(promises);
       const result = {};
+      // 整理 json
       getDatas.forEach((item) => {
         result[Object.keys(item)] = item[Object.keys(item)];
       });

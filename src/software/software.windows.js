@@ -27,7 +27,7 @@ export async function getSoftwareInfo() {
   try {
     const getChromeVersion = async () => {
       try {
-        const cmd = 'REG QUERY HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Google\\Update\\Clients\\{8A69D345-D564-463c-AFF1-A69D9E530F96}';;
+        const cmd = 'REG QUERY HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Google\\Update\\Clients\\{8A69D345-D564-463c-AFF1-A69D9E530F96}';
         // let regQuery = {
         //   stdout: '\r\nHKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Google\\Update\\Clients\\{8A69D345-D564-463c-AFF1-A69D9E530F96}\r\n    name    REG_SZ    Google Chrome\r\n    oopcrashes    REG_DWORD    0x1\r\n    pv    REG_SZ    50.0.2661.102\r\n\r\nHKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Google\\Update\\Clients\\{8A69D345-D564-463c-AFF1-A69D9E530F96}\\Commands\r\n'
         // };
@@ -102,7 +102,7 @@ export async function getSoftwareInfo() {
 
     const get360Version = async () => {
       try {
-        const cmd = ' reg query "HKEY_CURRENT_USER\\Software\\360\\360se6\\Update\\clients\\{02E720BD-2B50-4404-947C-65DBE64F6970}" /v pv ';
+        const cmd = ' reg query "HKEY_CURRENT_USER\\Software\\360\\360se6\\Update\\clients\\{02E720BD-2B50-4404-947C-65DBE64F6970}" /v pv';
         const regQuery = await exec(cmd);
         const str = regQuery.stdout;
         const objRE = new RegExp('\\d*\\.\\d*\\.\\d*\\.\\d*', 'g');

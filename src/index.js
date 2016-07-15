@@ -5,6 +5,7 @@ import networkService from './network';
 import * as errMsgService from './error';
 import * as reportService from './util/report';
 import * as configService from './util/config';
+import { regexAll } from './util/regex';
 import config from './config';
 
 export default class systemAgentCore {
@@ -37,6 +38,12 @@ export default class systemAgentCore {
     const osInfo = await softwareService[this.OSTYPE].getOSInfo();
     logger.info(osInfo);
     return osInfo;
+  }
+
+  async getAllInfo() {
+    const allData = await regexAll(this.OSTYPE);
+    logger.info(allData);
+    return allData;
   }
 
   async getHardwareInfo() {

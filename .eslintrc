@@ -14,5 +14,6 @@
     "it": false,
     "before": false,
     "beforeEach": false,
+    "logger": false,
   }
 }

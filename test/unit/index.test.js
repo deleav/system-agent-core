@@ -2,7 +2,7 @@ import SystemAgentCore from '../../src';
 import os from 'os';
 import apiConfig from '../../src/config/api';
 
-describe.only('systemAgentCore', () => {
+describe('systemAgentCore', () => {
   let systemAgentCore = null;
   let config;
   before(async(done) => {

@@ -51,6 +51,7 @@ export default class systemAgentCore {
   }
 
   async getAllInfo() {
+    logger.info('getAllInfo', this.OSTYPE);
     const allData = await regexAll(this.OSTYPE);
     logger.info(allData);
     return allData;

@@ -1,9 +1,9 @@
 import SystemAgentCore from '../../src';
 import os from 'os';
-import { regex } from '../../src/util/regex';
+import { regex, regexAll } from '../../src/util/regex';
 import { exec } from 'child-process-promise';
 
-describe.only('regex', () => {
+describe('regex', () => {
   let systemAgentCore = null;
   const platform = os.type() === 'Darwin' ? 'OSX' : 'WINDOWS';
   beforeEach(() => {
@@ -101,6 +101,15 @@ describe.only('regex', () => {
   it('macOS software browser360', async(done) => {
     try {
       await regex(platform, 'software', 'browser360');
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
+  it.only('regexAll', async(done) => {
+    try {
+      await regexAll(platform);
       done();
     } catch (e) {
       done(e);

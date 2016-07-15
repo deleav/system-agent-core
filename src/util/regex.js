@@ -65,11 +65,37 @@ export async function regexWindows(platform, device, target) {
 
 export async function regex(platform, device, target) {
   try {
+    let data;
     if (platform === 'OSX') {
-      await regexMac(platform, device, target);
+      data = await regexMac(platform, device, target);
     } else {
-      await regexWindows(platform, device, target);
+      data = await regexWindows(platform, device, target);
     }
+    let result = {};
+    result[target] = data;
+    return result;
+  } catch (e) {
+    logger.error(e);
+    throw e;
+  }
+}
+
+export async function regexAll(platform) {
+  try {
+    const datas = metadata[platform];
+    for (const deviceKey of Object.keys(datas)) {
+      const device = datas[deviceKey];
+      const promises = Object.keys(device).map((targetKey) =>
+        regex(platform, deviceKey, targetKey)
+      );
+      const getDatas = await Promise.all(promises);
+      const result = {};
+      getDatas.forEach((item) => {
+        result[Object.keys(item)] = item[Object.keys(item)];
+      });
+      datas[deviceKey] = result;
+    }
+    logger.log(datas);
   } catch (e) {
     logger.error(e);
     throw e;

@@ -18,6 +18,16 @@ describe('systemAgentCore', () => {
     }
   });
 
+  it.only('regexAll', async(done) => {
+    try {
+      const data = await systemAgentCore.getAllInfo();
+      console.log(data);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
   it('should get OS info', async(done) => {
     try {
       const result = await systemAgentCore.getOSInfo();

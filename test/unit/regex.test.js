@@ -107,7 +107,7 @@ describe('regex', () => {
     }
   });
 
-  it.only('regexAll', async(done) => {
+  it('regexAll', async(done) => {
     try {
       await regexAll(platform);
       done();

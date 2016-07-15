@@ -100,6 +100,7 @@ export async function regexAll(platform) {
       datas[deviceKey] = result;
     }
     logger.log(datas);
+    return datas;
   } catch (e) {
     logger.error(e);
     throw e;

@@ -34,8 +34,7 @@ export function pingArray(hostArray, i, newHostArray, cb) {
     getPingByRemoteHost(hostArray[i].host, (time) => {
       const newArray = newHostArray;
       const info = {
-        name: hostArray[i].name,
-        host: hostArray[i].host,
+        ...hostArray[i],
         time,
       };
       newArray.push(info);

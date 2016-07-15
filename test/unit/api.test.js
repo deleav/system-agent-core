@@ -86,7 +86,7 @@ describe('systemAgentCore api', () => {
     }
   });
 
-    describe.only('upload download', () => {
+    describe('upload download', () => {
       let systemAgentCore = null;
       let config;
       before(async(done) => {

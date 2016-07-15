@@ -38,6 +38,7 @@ export default class systemAgentCore {
   }
 
   async callApi(api, extraOption) {
+    logger.info("callApi", api, this.apiConfig[api], extraOption)
     const option = this.apiConfig[api];
     const result = await apiService.callApi({ ...option, ...extraOption });
     return result;
@@ -111,12 +112,10 @@ export default class systemAgentCore {
   }
 
   async getUploadSpeed(url) {
+    logger.info('getUploadSpeed', url);
     // const uploadSpeed = await networkService[this.OSTYPE].getUploadSpeed(host);
     const startTime = Math.floor(new Date().getTime());
-    await this.callApi('upload', {
-      url,
-      filePath: 'test10MB',
-    });
+    await this.callApi('upload', { url });
     const doneTime = Math.floor(new Date().getTime());
     const time = doneTime - startTime;
     const size = 1048576 / 1024 / 1024 * 8;
@@ -126,6 +125,7 @@ export default class systemAgentCore {
   }
 
   async getDownloadSpeed(url) {
+    logger.info('getDownloadSpeed', url);
     // const downloadSpeed = await networkService[this.OSTYPE].getDownloadSpeed(host);
     const startTime = Math.floor(new Date().getTime());
     await this.callApi('download', { url });
@@ -152,7 +152,8 @@ export default class systemAgentCore {
   }
 
   async getConfig() {
-    const config = await configService.getConfig();
+    // const config = await configService.getConfig();
+    const config = await this.callApi('config');
     logger.info(config);
     return config;
   }

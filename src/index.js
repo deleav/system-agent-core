@@ -149,14 +149,18 @@ export default class systemAgentCore {
   async sendReport(info) {
     logger.info('sendReport', info);
     const data = { ...info };
-    const audioFileURL = await this.callApi('uploadFile', {
-      filePath: info.audio,
-    });
-    data.audio = audioFileURL.FileURL;
-    const videoFileURL = await this.callApi('uploadFile', {
-      filePath: info.video,
-    });
-    data.video = videoFileURL.FileURL;
+    if (info.audio) {
+      const audioFileURL = await this.callApi('uploadFile', {
+        filePath: info.audio,
+      });
+      data.audio = audioFileURL.FileURL;
+    }
+    if (info.video) {
+      const videoFileURL = await this.callApi('uploadFile', {
+        filePath: info.video,
+      });
+      data.video = videoFileURL.FileURL;
+    }
     const report = await this.callApi('report', data);
     return report;
   }

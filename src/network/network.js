@@ -35,7 +35,7 @@ export function pingArray(hostArray, i, newHostArray, cb) {
       const newArray = newHostArray;
       const info = {
         ...hostArray[i],
-        time,
+        ping: time,
       };
       newArray.push(info);
       if (newArray.length === hostArray.length) {

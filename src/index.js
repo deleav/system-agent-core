@@ -146,9 +146,19 @@ export default class systemAgentCore {
     return errMsgService.getMessage(type);
   }
 
-  async exportReport(info) {
-    logger.info('exportReport', info);
-    return await reportService.exportReport(info);
+  async sendReport(info) {
+    logger.info('sendReport', info);
+    const data = { ...info };
+    const audioFileURL = await this.callApi('uploadFile', {
+      filePath: info.audio,
+    });
+    data.audio = audioFileURL.FileURL;
+    const videoFileURL = await this.callApi('uploadFile', {
+      filePath: info.video,
+    });
+    data.video = videoFileURL.FileURL;
+    const report = await this.callApi('report', data);
+    return report;
   }
 
   async getConfig() {

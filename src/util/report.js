@@ -1,6 +1,6 @@
 import axios from 'axios';
 import config from '../config';
-export async function exportReport(json) {
+export async function sendReport(json) {
   try {
     await axios.post(`${config.domain}/report`, json);
     return true;

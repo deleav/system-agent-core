@@ -19,6 +19,11 @@ module.exports = {
       }],
     },
     software: {
+      opera: [{
+        cmd: '/Applications/Opera.app/Contents/MacOS/Opera --version',
+        regex: '^(.*)\n$',
+        default: 'notFound',
+      }],
       safari: [{
         cmd: 'defaults read /Applications/Safari.app/Contents/version CFBundleShortVersionString',
         regex: '^(.*)\n$',
@@ -70,6 +75,11 @@ module.exports = {
       }],
     },
     software: {
+      opera: [{
+        cmd: 'REG QUERY HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall | findstr Opera',
+        regex: 'Opera (.*)',
+        default: 'notFound',
+      }],
       safari: [{
         cmd: '',
         regex: '',

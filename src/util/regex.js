@@ -82,7 +82,7 @@ export async function regex(platform, device, target) {
 
 export async function regexAll(platform) {
   try {
-    const datas = metadata[platform];
+    const datas = { ...metadata[platform] };
     for (const deviceKey of Object.keys(datas)) {
       const device = datas[deviceKey];
       const promises = Object.keys(device).map((targetKey) =>

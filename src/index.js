@@ -5,14 +5,17 @@ import networkService from './network';
 import * as errMsgService from './error';
 import * as reportService from './util/report';
 import * as configService from './util/config';
+import * as apiService from './util/callApi';
 import { regexAll } from './util/regex';
 import config from './config';
+import { roundDecimal } from './util/format';
 
 export default class systemAgentCore {
 
-  constructor({ ostype, logPath }) {
+  constructor({ ostype, logPath, apiConfig }) {
     // ostype: OSX, WINDOWS
     this.OSTYPE = ostype;
+    this.apiConfig = apiConfig;
     let logger;
     if (config.env === 'development') {
       logger = require('tracer').colorConsole();
@@ -34,6 +37,13 @@ export default class systemAgentCore {
     return 'hello';
   }
 
+  async callApi(api, extraOption) {
+    logger.info("callApi", api, this.apiConfig[api], extraOption)
+    const option = this.apiConfig[api];
+    const result = await apiService.callApi({ ...option, ...extraOption });
+    return result;
+  }
+
   async getOSInfo() {
     const osInfo = await softwareService[this.OSTYPE].getOSInfo();
     logger.info(osInfo);
@@ -41,6 +51,7 @@ export default class systemAgentCore {
   }
 
   async getAllInfo() {
+    logger.info('getAllInfo', this.OSTYPE);
     const allData = await regexAll(this.OSTYPE);
     logger.info(allData);
     return allData;
@@ -79,20 +90,51 @@ export default class systemAgentCore {
     return networkService[this.OSTYPE].getHostListPing(hostArray, cb);
   }
 
-  getSpeed(host, cb) {
-    logger.info('getSpeed', host);
-    networkService[this.OSTYPE].getSpeed(host, cb);
+  async getSpeed(testServer) {
+    logger.info('getSpeed', testServer);
+    // networkService[this.OSTYPE].getSpeed(host, cb);
+    const [
+      download,
+      upload,
+    ] = await Promise.all([
+      this.getDownloadSpeed(testServer.downloadTest),
+      this.getUploadSpeed(testServer.uploadTest),
+    ]);
+    const data = {
+      download,
+      upload,
+      clientIP: '',
+      ping: '',
+      downloadError: '',
+      uploadError: '',
+    };
+    logger.info(data);
+    return data;
   }
 
-  async getUploadSpeed(host) {
-    const uploadSpeed = await networkService[this.OSTYPE].getUploadSpeed(host);
-    logger.info(uploadSpeed);
-    return uploadSpeed
+  async getUploadSpeed(url) {
+    logger.info('getUploadSpeed', url);
+    // const uploadSpeed = await networkService[this.OSTYPE].getUploadSpeed(host);
+    const startTime = Math.floor(new Date().getTime());
+    await this.callApi('upload', { url });
+    const doneTime = Math.floor(new Date().getTime());
+    const time = doneTime - startTime;
+    const size = 1048576 / 1024 / 1024 * 8;
+    const uploadSpeed = roundDecimal(size / time * 1000, 2);
+    logger.info(uploadSpeed, size, time);
+    return uploadSpeed;
   }
 
-  async getDownloadSpeed(host) {
-    const downloadSpeed = await networkService[this.OSTYPE].getDownloadSpeed(host);
-    logger.info(downloadSpeed);
+  async getDownloadSpeed(url) {
+    logger.info('getDownloadSpeed', url);
+    // const downloadSpeed = await networkService[this.OSTYPE].getDownloadSpeed(host);
+    const startTime = Math.floor(new Date().getTime());
+    await this.callApi('download', { url });
+    const doneTime = Math.floor(new Date().getTime());
+    const time = doneTime - startTime;
+    const size = 2011165 / 1024 / 1024 * 8;
+    const downloadSpeed = roundDecimal(size / time * 1000, 2);
+    logger.info(downloadSpeed, size, time);
     return downloadSpeed
   }
 
@@ -105,17 +147,28 @@ export default class systemAgentCore {
     return errMsgService.getMessage(type);
   }
 
-  async callTeamview({ teamviewPath }) {
-    return await softwareService[this.OSTYPE].callTeamview(teamviewPath);
-  }
-
-  async exportReport(info) {
-    logger.info('exportReport', info);
-    return await reportService.exportReport(info);
+  async sendReport(info) {
+    logger.info('sendReport', info);
+    const data = { ...info };
+    if (info.audio) {
+      const audioFileURL = await this.callApi('uploadFile', {
+        filePath: info.audio,
+      });
+      data.audio = audioFileURL.FileURL;
+    }
+    if (info.video) {
+      const videoFileURL = await this.callApi('uploadFile', {
+        filePath: info.video,
+      });
+      data.video = videoFileURL.FileURL;
+    }
+    const report = await this.callApi('report', data);
+    return report;
   }
 
   async getConfig() {
-    const config = await configService.getConfig();
+    // const config = await configService.getConfig();
+    const config = await this.callApi('config');
     logger.info(config);
     return config;
   }

@@ -33,9 +33,10 @@
     "sinon": "*"
   },
   "dependencies": {
-    "axios": "^0.12.0",
+    "axios": "0.12.0",
     "babel-runtime": "^6.6.1",
     "child-process-promise": "^2.0.1",
+    "form-data": "1.0.0-rc4",
     "ftp": "^0.3.10",
     "iconv-lite": "^0.4.13",
     "ifconfig": "git+https://github.com/FuYaoDe/node-ifconfig.git",

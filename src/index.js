@@ -9,7 +9,7 @@ import * as apiService from './util/callApi';
 import { regexAll } from './util/regex';
 import config from './config';
 import { roundDecimal } from './util/format';
-
+import { exec } from 'child-process-promise';
 export default class systemAgentCore {
 
   constructor({ ostype, logPath, apiConfig }) {
@@ -23,7 +23,7 @@ export default class systemAgentCore {
       logger = require('tracer').console({
         transport: [
           function(data) {
-            fs.appendFile(logPath || `${__dirname}/../error.log`, `level:${data.level}\n${JSON.stringify(data)}\n`, (err) => {
+            fs.appendFile(logPath || `${__dirname}/../SystemAgent.log`, `level:${data.level}\n${JSON.stringify(data)}\n`, (err) => {
               if (err) throw err;
             });
           }
@@ -31,14 +31,19 @@ export default class systemAgentCore {
       });
     }
     global.logger = logger;
+    this.logPath = logPath || `${__dirname}/../SystemAgent.log`;
   }
 
   greet() {
     return 'hello';
   }
 
-  getLogPath() {
-    return this.logPath || `${__dirname}/../error.log`;
+  async openLogPath() {
+    if (this.OSTYPE === 'OSX') {
+      await exec(`open ${this.logPath.replace("SystemAgent.log", '')}`);
+    } else {
+      await exec(`explorer ${this.logPath.replace("SystemAgent.log", '')}`);
+    }
   }
 
   async callApi(api, extraOption) {

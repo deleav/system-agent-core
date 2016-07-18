@@ -276,11 +276,11 @@ describe('systemAgentCore', () => {
       }
     });
   });
-  it('test send report', async(done) => {
+  it.only('test send report', async(done) => {
     try {
       const data = {
         email: 'dan826@gmail.com',
-        audio: null,
+        audio: 'C:\\\\Users\\\\trunk\\\\AppData\\\\Roaming\\\\SystemAgent\\\\dan82625@gmail.com_20160618195251.wav',
         video: null,
         cpuBenchmark: 6.94,
         network: {
@@ -317,8 +317,8 @@ describe('systemAgentCore', () => {
       };
       const result = await systemAgentCore.sendReport(
         data,
-        'http://203.75.213.133/PMIT_TEST/api/Report',
-        'http://203.75.213.133/PMIT_TEST/api/UploadFile'
+        'http://203.75.213.133/PMIT_TEST1/api/Report',
+        'http://203.75.213.133/PMIT_TEST1/api/UploadFile'
       );
       done();
     } catch (e) {

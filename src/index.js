@@ -166,6 +166,7 @@ export default class systemAgentCore {
         url: uploadFileUrl,
         filePath: info.audio,
       });
+      logger.info('audioFileURL', audioFileURL);
       data.audio = audioFileURL.FileURL;
       if (audioFileURL.Message) {
         result.error.push(audioFileURL.Message);
@@ -179,6 +180,7 @@ export default class systemAgentCore {
         url: uploadFileUrl,
         filePath: info.video,
       });
+      logger.info('videoFileURL', videoFileURL);
       data.video = videoFileURL.FileURL;
       if (videoFileURL.Message) {
         result.error.push(videoFileURL.Message);

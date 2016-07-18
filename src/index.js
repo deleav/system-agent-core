@@ -37,6 +37,10 @@ export default class systemAgentCore {
     return 'hello';
   }
 
+  getLogPath() {
+    return this.logPath || `${__dirname}/../error.log`;
+  }
+
   async callApi(api, extraOption) {
     logger.info("callApi", api, this.apiConfig[api], extraOption)
     const option = this.apiConfig[api];
@@ -162,7 +166,8 @@ export default class systemAgentCore {
       });
       data.video = videoFileURL.FileURL;
     }
-    const report = await this.callApi('report', data);
+    const report = await this.callApi('report', { data });
+    logger.info('sendReportResult', report);
     return report;
   }
 

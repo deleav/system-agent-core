@@ -18,7 +18,7 @@ export async function getOSInfo() {
 
     return result;
   } catch (e) {
-    logger.error(e);
+    logger.error(e.message);
     throw e;
   }
 }
@@ -39,7 +39,7 @@ export async function getSoftwareInfo() {
         const result = match[0];
         return result;
       } catch (e) {
-        logger.error(e);
+        logger.error(e.message);
         return 'notFound';
       }
     };
@@ -55,7 +55,7 @@ export async function getSoftwareInfo() {
         const result = match[0];
         return result;
       } catch (e) {
-        logger.error(e);
+        logger.error(e.message);
         return 'notFound';
       }
     };
@@ -80,7 +80,7 @@ export async function getSoftwareInfo() {
         const result = match[1];
         return result;
       } catch (e) {
-        logger.error(e);
+        logger.error(e.message);
         return 'notFound';
       }
     };
@@ -95,7 +95,7 @@ export async function getSoftwareInfo() {
         const result = match[0];
         return result;
       } catch (e) {
-        logger.error(e);
+        logger.error(e.message);
         return 'notFound';
       }
     };
@@ -110,7 +110,7 @@ export async function getSoftwareInfo() {
         const result = match[0];
         return result;
       } catch (e) {
-        logger.error(e);
+        logger.error(e.message);
         return 'notFound';
       }
     };
@@ -127,7 +127,7 @@ export async function getSoftwareInfo() {
 
     return result;
   } catch (e) {
-    logger.error(e);
+    logger.error(e.message);
     throw e;
   }
 }
@@ -145,7 +145,7 @@ export async function callTeamview({ teamviewPath }) {
 
     return result;
   } catch (e) {
-    logger.error(e);
+    logger.error(e.message);
     throw e;
   }
 }

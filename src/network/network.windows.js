@@ -33,7 +33,7 @@ export async function getNetworkInfo() {
     };
     return result;
   } catch (e) {
-    logger.error(e);
+    logger.error(e.message);
     throw e;
   }
 }

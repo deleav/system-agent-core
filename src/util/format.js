@@ -1,10 +1,4 @@
 module.exports = {
-  formateSystemProfiler: (str, key) => {
-    const objRE = new RegExp(`${key}: (.*)\n`);
-    const match = str.match(objRE);
-    return match[1];
-  },
-
   formateWmic: (str) => {
     const objRE = new RegExp(`\n(.*)`);
     const match = str.match(objRE);

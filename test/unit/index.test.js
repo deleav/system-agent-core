@@ -49,29 +49,6 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it('should get OS info', async(done) => {
-    try {
-      const result = await systemAgentCore.getOSInfo();
-      result.should.has.keys('OSSoftwareData');
-
-      done();
-    } catch (e) {
-      done(e);
-    }
-  });
-
-  it('should get software info', async (done) => {
-    try {
-      const result = await systemAgentCore.getSoftwareInfo();
-      console.log(result);
-      result.should.has.keys('safari', 'chrome', 'flash', 'ie', 'firefox', 'browser360', 'opera');
-
-      done();
-    } catch (e) {
-      done(e);
-    }
-  });
-
   it('should get Ping', (done) => {
     systemAgentCore.getPingByRemoteHost('172.217.25.99', (result) => {
       console.log(`ping: ${result}`);
@@ -131,7 +108,7 @@ describe('systemAgentCore', () => {
     });
   });
 
-  it('get osx hardware info', async(done) => {
+  it.skip('get osx hardware info', async(done) => {
     try {
       const result = await systemAgentCore.getHardwareInfo();
       console.log(result);
@@ -142,18 +119,30 @@ describe('systemAgentCore', () => {
     }
   });
 
-  function echo(b) {
-    console.log(b);
-  }
-
-  it('get getCpuBenchmark', (done) => {
+  it('get osx hardware info', async(done) => {
     try {
-      const result = systemAgentCore.getCpuBenchmark(echo);
-      console.log(result);
-      done();
+      if (os.type() === 'Darwin') {
+        const hardwareService = require('../../src/hardware').default;
+        const result = await hardwareService.OSX.getRamlInfo();
+        console.log(result);
+        done();
+      } else {
+        done();
+      }
     } catch (e) {
       done(e);
     }
+  });
+
+  it('get getCpuBenchmark', (done) => {
+    const result = systemAgentCore.getCpuBenchmark((value) => {
+      try {
+        console.log(value);
+        done();
+      } catch (e) {
+        done(e);
+      }
+    });
   });
 
   it.skip('export report file by system info', async(done) => {

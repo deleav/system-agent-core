@@ -1,7 +1,4 @@
 import ping from 'net-ping';
-import config from '../config';
-import { roundDecimal } from '../util/format';
-import speedTest from 'speedtest-net';
 
 export function getPingByRemoteHost(host, cb) {
   try {
@@ -91,35 +88,5 @@ export function traceRoute(host, ttlOrOptions, cb) {
   } catch (e) {
     logger.error(e.message);
     cb('permissionsDenied');
-  }
-}
-
-export function getSpeed(host, cb) {
-  try {
-    const test = speedTest({maxTime: 5000});
-    test.on('data', function(data) {
-      logger.info(data);
-      cb({
-        download: roundDecimal(data.speeds.download, 2),
-        upload: roundDecimal(data.speeds.upload, 2),
-        clientIP: data.client.ip,
-        ping: data.server.ping,
-        downloadError: '',
-        uploadError: '',
-      });
-    });
-    test.on('error', function(err) {
-      throw err;
-    });
-  } catch (e) {
-    logger.error(e.message);
-    cb({
-      download: 0,
-      upload: 0,
-      clientIP: null,
-      ping: 9999,
-      downloadError: 'error',
-      uploadError: 'error',
-    });
   }
 }

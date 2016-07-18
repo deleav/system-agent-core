@@ -3,8 +3,6 @@ import hardwareService from './hardware';
 import softwareService from './software';
 import networkService from './network';
 import * as errMsgService from './error';
-import * as reportService from './util/report';
-import * as configService from './util/config';
 import * as apiService from './util/callApi';
 import { regexAll } from './util/regex';
 import config from './config';
@@ -53,12 +51,6 @@ export default class systemAgentCore {
     return result;
   }
 
-  async getOSInfo() {
-    const osInfo = await softwareService[this.OSTYPE].getOSInfo();
-    logger.info(osInfo);
-    return osInfo;
-  }
-
   async getAllInfo() {
     logger.info('getAllInfo', this.OSTYPE);
     const allData = await regexAll(this.OSTYPE);
@@ -66,27 +58,9 @@ export default class systemAgentCore {
     return allData;
   }
 
-  async getHardwareInfo() {
-    const hardwareInfo = await hardwareService[this.OSTYPE].getHardwareInfo();
-    logger.info(hardwareInfo);
-    return hardwareInfo
-  }
-
   getCpuBenchmark(callback) {
     logger.info('getCpuBenchmark');
     return hardwareService[this.OSTYPE].getCpuBenchmark(callback);
-  }
-
-  async getSoftwareInfo() {
-    const softwareInfo = await softwareService[this.OSTYPE].getSoftwareInfo();
-    logger.info(softwareInfo);
-    return softwareInfo;
-  }
-
-  async getNetworkInfo() {
-    const networkInfo = networkService[this.OSTYPE].getNetworkInfo();
-    logger.info(networkInfo);
-    return networkInfo;
   }
 
   getPingByRemoteHost(host, cb) {
@@ -101,7 +75,6 @@ export default class systemAgentCore {
 
   async getSpeed(testServer) {
     logger.info('getSpeed', testServer);
-    // networkService[this.OSTYPE].getSpeed(host, cb);
     const [
       download,
       upload,
@@ -199,7 +172,6 @@ export default class systemAgentCore {
   }
 
   async getConfig() {
-    // const config = await configService.getConfig();
     const config = await this.callApi('config');
     logger.info(config);
     return config;

@@ -5,8 +5,8 @@ module.exports = {
   windowsExec: async(cmd) => {
     const encoding = 'big5';
     const binaryEncoding = 'binary';
-    const result = await exec(cmd, {encoding: binaryEncoding});
+    const result = await exec(cmd, { encoding: binaryEncoding });
     const cmdDecode = iconv.decode(new Buffer(result.stdout, binaryEncoding), encoding);
     return cmdDecode;
-  }
+  },
 };

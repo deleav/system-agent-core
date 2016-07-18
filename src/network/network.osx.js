@@ -38,15 +38,3 @@ export async function getNetworkHardwareInfo() {
   });
   return matchArray;
 }
-
-export async function getNetworkInfo() {
-  try {
-    const result = {
-      networkSetup: await getNetworkHardwareInfo(),
-    };
-    return result;
-  } catch (e) {
-    logger.error(e.message);
-    throw e;
-  }
-}

@@ -23,6 +23,7 @@ describe('systemAgentCore api', () => {
   it('should get config', async(done) => {
     try {
       const result = await systemAgentCore.callApi('config');
+      console.log(result);
       result.should.has.keys('ad', 'testServer', 'report', 'uploadApi', 'debug');
       done();
     } catch (e) {

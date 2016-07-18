@@ -19,7 +19,7 @@ export async function callApi(option) {
     const result = await axios(option);
     return result.data;
   } catch (e) {
-    logger.error(e);
+    logger.error(e.data);
     return e.data;
   }
 }

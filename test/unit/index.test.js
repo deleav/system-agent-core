@@ -265,7 +265,7 @@ describe('systemAgentCore', () => {
       }
     });
   });
-  it.only('test send report', async(done) => {
+  it('test send report', async(done) => {
     try {
       const data = {
         email: 'dan826@gmail.com',

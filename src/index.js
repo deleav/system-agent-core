@@ -106,8 +106,8 @@ export default class systemAgentCore {
       download,
       upload,
     ] = await Promise.all([
-      this.getDownloadSpeed(testServer.downloadTest),
-      this.getUploadSpeed(testServer.uploadTest),
+      this.getDownloadSpeed(testServer.downloadTest || testServer.uploadSpeedTestEndpoint),
+      this.getUploadSpeed(testServer.uploadTest || testServer.downloadSpeedTestEndpoint),
     ]);
     const data = {
       download,
@@ -156,24 +156,44 @@ export default class systemAgentCore {
     return errMsgService.getMessage(type);
   }
 
-  async sendReport(info) {
+  async sendReport(info, reportUrl, uploadFileUrl) {
     logger.info('sendReport', info);
+    let result = {};
+    result.error = [];
     const data = { ...info };
     if (info.audio) {
       const audioFileURL = await this.callApi('uploadFile', {
+        url: uploadFileUrl,
         filePath: info.audio,
       });
       data.audio = audioFileURL.FileURL;
+      if (audioFileURL.Message) {
+        result.error.push(audioFileURL.Message);
+      }
+      if (audioFileURL.ErrMsg) {
+        result.error.push(audioFileURL.ErrMsg);
+      }
     }
     if (info.video) {
       const videoFileURL = await this.callApi('uploadFile', {
+        url: uploadFileUrl,
         filePath: info.video,
       });
       data.video = videoFileURL.FileURL;
+      if (videoFileURL.Message) {
+        result.error.push(videoFileURL.Message);
+      }
+      if (videoFileURL.ErrMsg) {
+        result.error.push(videoFileURL.ErrMsg);
+      }
     }
-    const report = await this.callApi('report', { data });
+    const report = await this.callApi('report', { url: reportUrl, data });
     logger.info('sendReportResult', report);
-    return report;
+    if (report.status === 'N') {
+      result.error.push(report.ErrMsg);
+    }
+    logger.info('sendReportResult', result);
+    return result;
   }
 
   async getConfig() {

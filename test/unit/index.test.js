@@ -265,4 +265,49 @@ describe('systemAgentCore', () => {
       }
     });
   });
+  it('test send report', async(done) => {
+    try {
+      const data = {
+        email: 'dan826@gmail.com',
+        audio: null,
+        video: null,
+        cpuBenchmark: 6.94,
+        network: {
+          ip: '203.69.82.146',
+          ping: 28,
+          upload: 1.1,
+          download: 1.22,
+          traceRoute: '',
+        },
+        cpu: 'Intel(R) Core(TM) i5-5287U CPU @ 2.90GHz',
+        model: 'MacBookPro12,1',
+        modelVersion: '',
+        ram: {
+          size: '16',
+          speed: '',
+          status: '',
+          type: '',
+        },
+        networkInterface: {
+          device: 'en0',
+          ethernetAddress: 'a0:99:9b:04:d7:a1',
+          hardware: 'Wi-Fi',
+          enable: true,
+        },
+        software: {
+          browser360: null,
+          chrome: '51.0.2704.106 ',
+          firefox: '46.0.1',
+          flash: 'notFound',
+          ie: null,
+          opera: '38.0.2220.41',
+          safari: '9.1.1',
+        },
+      };
+      const result = await systemAgentCore.sendReport(data);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
 });

@@ -71,15 +71,17 @@ describe('systemAgentCore api', () => {
           enable: false,
         },
         software: {
-          browser360: 'notFound',
+          china360: 'notFound',
           chrome: '51.0.2704.103',
           firefox: '44.0.2',
           flash: 'notFound',
           ie: 'notFound',
           safari: '9.1.1',
+          opera: 'notFound',
         },
       };
       const result = await systemAgentCore.callApi('report', {data});
+      console.log(result);
       done();
     } catch (e) {
       done(e);

@@ -26,7 +26,7 @@ export async function regexMac(platform, device, target) {
     logger.info(result);
     return result;
   } catch (e) {
-    logger.error(e);
+    logger.error(e.message);
     throw e;
   }
 }
@@ -58,7 +58,7 @@ export async function regexWindows(platform, device, target) {
     logger.info(result);
     return result;
   } catch (e) {
-    logger.error(e);
+    logger.error(e.message);
     throw e;
   }
 }
@@ -75,7 +75,7 @@ export async function regex(platform, device, target) {
     result[target] = data;
     return result;
   } catch (e) {
-    logger.error(e);
+    logger.error(e.message);
     throw e;
   }
 }
@@ -102,7 +102,7 @@ export async function regexAll(platform) {
     logger.log(datas);
     return datas;
   } catch (e) {
-    logger.error(e);
+    logger.error(e.message);
     throw e;
   }
 }

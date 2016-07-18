@@ -106,8 +106,8 @@ export default class systemAgentCore {
       download,
       upload,
     ] = await Promise.all([
-      this.getDownloadSpeed(testServer.downloadTest || testServer.uploadSpeedTestEndpoint),
-      this.getUploadSpeed(testServer.uploadTest || testServer.downloadSpeedTestEndpoint),
+      this.getDownloadSpeed(testServer.downloadTest || testServer.downloadSpeedTestEndpoint),
+      this.getUploadSpeed(testServer.uploadTest || testServer.uploadSpeedTestEndpoint),
     ]);
     const data = {
       download,

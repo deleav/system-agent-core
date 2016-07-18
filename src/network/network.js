@@ -16,7 +16,8 @@ export function getPingByRemoteHost(host, cb) {
     session.pingHost(host, (error, target, sent, rcvd) => {
       const ms = rcvd - sent;
       if (error) {
-        logger.error(error);
+        logger.error(error.toString());
+        // console.log(error);
         cb(9999, error.toString());
       } else {
         logger.info(ms);
@@ -24,7 +25,8 @@ export function getPingByRemoteHost(host, cb) {
       }
     });
   } catch (e) {
-    logger.error(e);
+    logger.error(e.message);
+    // console.log(e);
     cb(9999, 'permissionsDenied');
   }
 }
@@ -47,7 +49,7 @@ export function pingArray(hostArray, i, newHostArray, cb) {
       }
     });
   } catch (e) {
-    logger.error(e);
+    logger.error(e.message);
     throw e
   }
 }
@@ -56,7 +58,7 @@ export async function getHostListPing(hostArray, cb) {
   try {
     pingArray(hostArray, 0, [], cb);
   } catch (e) {
-    logger.error(e);
+    logger.error(e.message);
     throw e
   }
 }
@@ -72,7 +74,7 @@ export function traceRoute(host, ttlOrOptions, cb) {
           logger.info(error);
           trace += `${error.source} ttl=${ttl} ms=${ms} `;
         } else {
-          logger.error(error);
+          logger.error(error.toString());
           trace += `${error.toString()} ttl=${ttl} ms=${ms} `;
         }
       } else {
@@ -81,13 +83,13 @@ export function traceRoute(host, ttlOrOptions, cb) {
       }
     }, (error, target) => {
       if (error) {
-        logger.error(error);
+        logger.error(error.toString());
         trace += `${error.toString()}`;
       }
       cb(trace);
     });
   } catch (e) {
-    logger.error(e);
+    logger.error(e.message);
     cb('permissionsDenied');
   }
 }
@@ -110,7 +112,7 @@ export function getSpeed(host, cb) {
       throw err;
     });
   } catch (e) {
-    logger.error(e);
+    logger.error(e.message);
     cb({
       download: 0,
       upload: 0,

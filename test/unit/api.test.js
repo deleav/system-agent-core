@@ -20,9 +20,10 @@ describe('systemAgentCore api', () => {
     }
   });
 
-  it('should get config', async(done) => {
+  it.only('should get config', async(done) => {
     try {
       const result = await systemAgentCore.callApi('config');
+      console.log(result);
       result.should.has.keys('ad', 'testServer', 'report', 'uploadApi', 'debug');
       done();
     } catch (e) {
@@ -32,7 +33,8 @@ describe('systemAgentCore api', () => {
 
   it('should upload', async(done) => {
     try {
-      const result = await systemAgentCore.callApi('uploadFile');
+      const result = await systemAgentCore.callApi('uploadFile', 'C:\\Users\\trunk\\AppData\\Roaming\\SystemAgent\\dan82625@gmail.com_20160618154557.wav');
+      console.log(result);
       result.should.has.keys('FileURL', 'ErrMsg');
       (result.ErrMsg === null).should.be.a.true;
       done();
@@ -121,7 +123,7 @@ describe('systemAgentCore api', () => {
           const startTime = Math.floor(new Date().getTime());
           const result = await systemAgentCore.callApi('upload', {
             url: testServer.uploadTest,
-            filePath: 'test10MB',
+            filePath: 'test1MB',
           });
           result.should.be.equal('File Upload Test End');
 

@@ -1,6 +1,7 @@
 import SystemAgentCore from '../../src';
 import os from 'os';
 import apiConfig from '../../src/config/api';
+import { exec } from 'child-process-promise';
 
 describe('systemAgentCore', () => {
   let systemAgentCore = null;
@@ -23,8 +24,18 @@ describe('systemAgentCore', () => {
       logger.info(config);
       done()
     } catch (e) {
-      logger.error(e);
+      logger.error(e.message);
       done(e)
+    }
+  });
+
+  it('test exec', async(done) => {
+    try {
+      const data = await exec('ping 192.168.168.1');
+      console.log(data);
+      done();
+    } catch (e) {
+      done(e);
     }
   });
 
@@ -265,7 +276,7 @@ describe('systemAgentCore', () => {
       }
     });
   });
-  it.only('test send report', async(done) => {
+  it('test send report', async(done) => {
     try {
       const data = {
         email: 'dan826@gmail.com',

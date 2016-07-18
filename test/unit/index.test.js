@@ -265,7 +265,7 @@ describe('systemAgentCore', () => {
       }
     });
   });
-  it('test send report', async(done) => {
+  it.only('test send report', async(done) => {
     try {
       const data = {
         email: 'dan826@gmail.com',
@@ -304,7 +304,11 @@ describe('systemAgentCore', () => {
           safari: '9.1.1',
         },
       };
-      const result = await systemAgentCore.sendReport(data);
+      const result = await systemAgentCore.sendReport(
+        data,
+        'http://203.75.213.133/PMIT_TEST/api/Report',
+        'http://203.75.213.133/PMIT_TEST/api/UploadFile'
+      );
       done();
     } catch (e) {
       done(e);

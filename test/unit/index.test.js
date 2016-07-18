@@ -29,7 +29,7 @@ describe('systemAgentCore', () => {
     }
   });
 
-  it('test exec', async(done) => {
+  it.skip('test exec', async(done) => {
     try {
       const data = await exec('ping 192.168.168.1');
       console.log(data);
@@ -280,7 +280,7 @@ describe('systemAgentCore', () => {
     try {
       const data = {
         email: 'dan826@gmail.com',
-        audio: 'C:\\\\Users\\\\trunk\\\\AppData\\\\Roaming\\\\SystemAgent\\\\dan82625@gmail.com_20160618195251.wav',
+        audio: null,
         video: null,
         cpuBenchmark: 6.94,
         network: {

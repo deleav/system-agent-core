@@ -24,16 +24,16 @@ describe('systemAgentCore api', () => {
     try {
       const result = await systemAgentCore.callApi('config');
       console.log(result);
-      result.should.has.keys('ad', 'testServer', 'report', 'uploadApi', 'debug');
+      result.should.has.keys('ad', 'testServer', 'reportEndpoint', 'uploadFilesEndpoint', 'debug');
       done();
     } catch (e) {
       done(e);
     }
   })
 
-  it('should upload', async(done) => {
+  it.skip('should upload', async(done) => {
     try {
-      const result = await systemAgentCore.callApi('uploadFile', {filePath: 'C:\\Users\\trunk\\AppData\\Roaming\\SystemAgent\\dan82625@gmail.com_20160618183629.wav'});
+      const result = await systemAgentCore.callApi('uploadFile', {filePath: ''});
       console.log(result);
       result.should.has.keys('FileURL', 'ErrMsg');
       (result.ErrMsg === null).should.be.a.true;
@@ -82,7 +82,11 @@ describe('systemAgentCore api', () => {
           opera: 'notFound',
         },
       };
-      const result = await systemAgentCore.callApi('report', {data});
+      const result = await systemAgentCore.callApi('report',
+      { data },
+      'http://203.75.213.133/PMIT_TEST1/api/Report',
+      'http://203.75.213.133/PMIT_TEST1/api/UploadFile'
+    );
       console.log(result);
       done();
     } catch (e) {
@@ -122,8 +126,8 @@ describe('systemAgentCore api', () => {
 
           const startTime = Math.floor(new Date().getTime());
           const result = await systemAgentCore.callApi('upload', {
-            url: testServer.uploadTest,
-            filePath: 'test1MB',
+            url: testServer.uploadSpeedTestEndpoint,
+            filePath: 'test10MB',
           });
           result.should.be.equal('File Upload Test End');
 
@@ -140,7 +144,7 @@ describe('systemAgentCore api', () => {
           const startTime = Math.floor(new Date().getTime());
           const testServer = config.testServer[0];
           const result = await systemAgentCore.callApi('download', {
-            url: testServer.downloadTest,
+            url: testServer.downloadSpeedTestEndpoint,
           });
           const doneTime = Math.floor(new Date().getTime());
           console.log("!!!", 2011165 / (doneTime - startTime) * 1000 / 1024 / 1024 * 8);
@@ -151,5 +155,4 @@ describe('systemAgentCore api', () => {
         }
       });
     });
-
 });

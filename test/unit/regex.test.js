@@ -39,7 +39,7 @@ describe('regex', () => {
 
   it('macOS hardware ram', async(done) => {
     try {
-      let a = await regex(platform, 'hardware', 'ram');
+      await regex(platform, 'hardware', 'ram');
       done();
     } catch (e) {
       done(e);

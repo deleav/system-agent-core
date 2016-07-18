@@ -44,7 +44,7 @@ export async function getHardwareInfo() {
       ram: await getRamlInfo(),
       network: await networkService.OSX.getNetworkHardwareInfo(),
     };
-
+    
     return result;
   } catch (e) {
     throw e;

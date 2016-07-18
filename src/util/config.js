@@ -6,7 +6,7 @@ export async function getConfig() {
     const result = await axios.get('https://s3-ap-northeast-1.amazonaws.com/s3.trunksys.com/systemagent/config.json');
     return result.data;
   } catch (e) {
-    console.log(e);
+    logger.error(e);
     return false;
   }
 }

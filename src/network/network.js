@@ -1,10 +1,7 @@
 import ping from 'net-ping';
-import Client from 'ftp';
 import config from '../config';
-import fs from 'fs';
 import { roundDecimal } from '../util/format';
-
-const { ulConfig, dlConfig } = config;
+import speedTest from 'speedtest-net';
 
 export function getPingByRemoteHost(host, cb) {
   try {
@@ -19,12 +16,15 @@ export function getPingByRemoteHost(host, cb) {
     session.pingHost(host, (error, target, sent, rcvd) => {
       const ms = rcvd - sent;
       if (error) {
+        logger.error(error);
         cb(9999, error.toString());
       } else {
+        logger.info(ms);
         cb(ms);
       }
     });
   } catch (e) {
+    logger.error(e);
     cb(9999, 'permissionsDenied');
   }
 }
@@ -33,18 +33,21 @@ export function pingArray(hostArray, i, newHostArray, cb) {
   try {
     getPingByRemoteHost(hostArray[i].host, (time) => {
       const newArray = newHostArray;
-      newArray.push({
-        name: hostArray[i].name,
-        host: hostArray[i].host,
-        time,
-      });
+      const info = {
+        ...hostArray[i],
+        ping: time,
+      };
+      newArray.push(info);
       if (newArray.length === hostArray.length) {
+        logger.info('pingArray finish');
         cb(newArray);
       } else {
+        logger.info(info);
         pingArray(hostArray, i + 1, newArray, cb);
       }
     });
   } catch (e) {
+    logger.error(e);
     throw e
   }
 }
@@ -53,128 +56,8 @@ export async function getHostListPing(hostArray, cb) {
   try {
     pingArray(hostArray, 0, [], cb);
   } catch (e) {
+    logger.error(e);
     throw e
-  }
-}
-
-export async function getUploadSpeed(host) {
-  const client = new Client();
-  const startUpload = (done, err) => {
-    if (err) {
-      done('error');
-    } else {
-      const startTime = Math.floor(new Date().getTime());
-      client.put(`${__dirname}/../../test10MB`, ulConfig.dest, (err, list) => {
-        if (err) {
-          done('error');
-        } else {
-          client.list(ulConfig.folder, (err, list) => {
-            if (err) {
-              done(err.toString());
-            } else {
-              client.end();
-              const doneTime = Math.floor(new Date().getTime());
-
-              done(roundDecimal(8 * 1 * 1024 / (doneTime - startTime) * 1000, 2));
-            }
-          });
-        }
-      });
-    }
-  };
-  try {
-    client.connect({
-      host: host || ulConfig.host,
-      user: ulConfig.user,
-      password: ulConfig.pwd,
-    });
-
-    const uploadFile = async () => {
-      const result = await new Promise((done) => {
-        getPingByRemoteHost(ulConfig.host, (ping) => {
-          if (ping !== 9999) {
-            fs.stat(`${__dirname}/../../test10MB`, (err) => {
-              if (err) {
-                if (err.code === 'ENOENT') {
-                  fs.writeFile(`${__dirname}/../../test10MB`, new Buffer(1024 * 1024 * 1), () => {
-                    client.on('ready', () => {
-                      client.delete(ulConfig.dest, (err) => {
-                        if (err) {
-                          done('error');
-                        } else {
-                          client.list(ulConfig.folder, (err, list) => {
-                            startUpload(done, err, list);
-                          });
-                        }
-                      });
-                    });
-                  });
-                } else {
-                  console.log('Some other error: ', err.code);
-                  done(err.toString());
-                }
-              } else {
-                startUpload(done, null, null);
-              }
-            });
-          } else {
-            done('error');
-          }
-        });
-      });
-
-      return result;
-    };
-
-    return await uploadFile();
-  } catch (e) {
-    return 'permissionsDenied';
-    // throw e;
-  }
-}
-
-export async function getDownloadSpeed(host) {
-  try {
-    const client = new Client();
-    client.connect({
-      host: host || dlConfig.host,
-      user: dlConfig.user,
-      password: dlConfig.pwd,
-    });
-
-    const downloadFile = async () => {
-      const result = await new Promise((done) => {
-        getPingByRemoteHost(ulConfig.host, (ping) => {
-          if (ping !== 9999) {
-            client.on('ready', () => {
-              const startTime = Math.floor(new Date().getTime());
-              console.log(`download startTime: ${startTime}`);
-              client.get(dlConfig.target, (err, stream) => {
-                if (err) {
-                  done(err.toString());
-                } else {
-                  stream.once('close', () => {
-                    const doneTime = Math.floor(new Date().getTime());
-                    console.log(`download doneTime: ${doneTime}`);
-
-                    client.end();
-                    done(roundDecimal(8 * 3 * 1024 / (doneTime - startTime) * 1000, 2));
-                  });
-                }
-              });
-            });
-          } else {
-            done('error');
-          }
-        });
-      });
-
-      return result;
-    };
-
-    return await downloadFile();
-  } catch (e) {
-    return 'permissionsDenied';
   }
 }
 
@@ -186,20 +69,55 @@ export function traceRoute(host, ttlOrOptions, cb) {
       const ms = rcvd - sent;
       if (error) {
         if (error instanceof ping.TimeExceededError) {
+          logger.info(error);
           trace += `${error.source} ttl=${ttl} ms=${ms} `;
         } else {
+          logger.error(error);
           trace += `${error.toString()} ttl=${ttl} ms=${ms} `;
         }
       } else {
+        logger.info(target, ttl, sent, rcvd);
         trace += `${target} ttl=${ttl} ms=${ms} `;
       }
     }, (error, target) => {
       if (error) {
+        logger.error(error);
         trace += `${error.toString()}`;
       }
       cb(trace);
     });
   } catch (e) {
+    logger.error(e);
     cb('permissionsDenied');
+  }
+}
+
+export function getSpeed(host, cb) {
+  try {
+    const test = speedTest({maxTime: 5000});
+    test.on('data', function(data) {
+      logger.info(data);
+      cb({
+        download: roundDecimal(data.speeds.download, 2),
+        upload: roundDecimal(data.speeds.upload, 2),
+        clientIP: data.client.ip,
+        ping: data.server.ping,
+        downloadError: '',
+        uploadError: '',
+      });
+    });
+    test.on('error', function(err) {
+      throw err;
+    });
+  } catch (e) {
+    logger.error(e);
+    cb({
+      download: 0,
+      upload: 0,
+      clientIP: null,
+      ping: 9999,
+      downloadError: 'error',
+      uploadError: 'error',
+    });
   }
 }

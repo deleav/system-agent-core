@@ -22,6 +22,7 @@ export async function getNetworkHardwareInfo() {
   const ifconfigJson = await new Promise((done) => {
     ifconfig((err, results) => {
       if (err) {
+        logger.error(e);
         console.log("ERROR: %s\n%s", err, results);
       }
       done(results);
@@ -45,6 +46,7 @@ export async function getNetworkInfo() {
     };
     return result;
   } catch (e) {
+    logger.error(e);
     throw e;
   }
 }

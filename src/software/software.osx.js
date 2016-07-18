@@ -15,12 +15,26 @@ export async function getOSInfo() {
 
     return result;
   } catch (e) {
+    logger.error(e);
     throw e;
   }
 }
 
 export async function getSoftwareInfo() {
   try {
+
+    const getOperaVersion = async () => {
+      try {
+        const cmd = '/Applications/Opera.app/Contents/MacOS/Opera --version';
+        const cmdResult = await exec(cmd);
+        const str = cmdResult.stdout.replace('\n', '');
+        return str;
+      } catch (e) {
+        logger.error(e);
+        return 'notFound';
+      }
+    };
+
     const getSafariVersion = async () => {
       let cmd = '';
       cmd = 'defaults read /Applications/Safari.app/Contents/version CFBundleShortVersionString';
@@ -37,6 +51,7 @@ export async function getSoftwareInfo() {
         const str = cmdResult.stdout;
         return str.replace('Google Chrome ', '').replace('\n', '').trim();
       } catch (e) {
+        logger.error(e);
         return 'notFound';
       }
     };
@@ -49,6 +64,7 @@ export async function getSoftwareInfo() {
         const str = cmdResult.stdout.replace('\n', '');
         return str;
       } catch (e) {
+        logger.error(e);
         return 'notFound';
       }
     };
@@ -61,6 +77,7 @@ export async function getSoftwareInfo() {
         const str = cmdResult.stdout;
         return str.replace('Mozilla Firefox ', '').replace('\n', '').trim();
       } catch (e) {
+        logger.error(e);
         return 'notFound';
       }
     };
@@ -72,11 +89,13 @@ export async function getSoftwareInfo() {
       flash: await getFlashVersion(),
       ie: null,
       firefox: await getFirfoxVersion(),
-      360: null,
+      browser360: null,
+      opera: await getOperaVersion(),
     };
 
     return result;
   } catch (e) {
+    logger.error(e);
     throw e;
   }
 }
@@ -91,6 +110,7 @@ export async function callTeamview({ teamviewPath }) {
     };
     return result;
   } catch (e) {
+    logger.error(e);
     throw e;
   }
 }

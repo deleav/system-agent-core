@@ -1,4 +1,5 @@
 import networkService from './network';
+import hardwareService from './hardware';
 module.exports = {
   OSX: {
     hardware: {
@@ -67,8 +68,7 @@ module.exports = {
         regex: '\n(.*)',
       }],
       ram: [{
-        cmd: '',
-        regex: '',
+        method: hardwareService.WINDOWS.getRamlInfo(),
       }],
       network: [{
         method: networkService.WINDOWS.getNetworkHardwareInfo(),

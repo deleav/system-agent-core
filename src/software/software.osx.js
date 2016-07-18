@@ -15,7 +15,7 @@ export async function getOSInfo() {
 
     return result;
   } catch (e) {
-    logger.error(e);
+    logger.error(e.message);
     throw e;
   }
 }
@@ -30,7 +30,7 @@ export async function getSoftwareInfo() {
         const str = cmdResult.stdout.replace('\n', '');
         return str;
       } catch (e) {
-        logger.error(e);
+        logger.error(e.message);
         return 'notFound';
       }
     };
@@ -51,7 +51,7 @@ export async function getSoftwareInfo() {
         const str = cmdResult.stdout;
         return str.replace('Google Chrome ', '').replace('\n', '').trim();
       } catch (e) {
-        logger.error(e);
+        logger.error(e.message);
         return 'notFound';
       }
     };
@@ -64,7 +64,7 @@ export async function getSoftwareInfo() {
         const str = cmdResult.stdout.replace('\n', '');
         return str;
       } catch (e) {
-        logger.error(e);
+        logger.error(e.message);
         return 'notFound';
       }
     };
@@ -77,7 +77,7 @@ export async function getSoftwareInfo() {
         const str = cmdResult.stdout;
         return str.replace('Mozilla Firefox ', '').replace('\n', '').trim();
       } catch (e) {
-        logger.error(e);
+        logger.error(e.message);
         return 'notFound';
       }
     };
@@ -95,7 +95,7 @@ export async function getSoftwareInfo() {
 
     return result;
   } catch (e) {
-    logger.error(e);
+    logger.error(e.message);
     throw e;
   }
 }
@@ -110,7 +110,7 @@ export async function callTeamview({ teamviewPath }) {
     };
     return result;
   } catch (e) {
-    logger.error(e);
+    logger.error(e.message);
     throw e;
   }
 }

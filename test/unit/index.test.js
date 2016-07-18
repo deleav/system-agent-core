@@ -1,6 +1,7 @@
 import SystemAgentCore from '../../src';
 import os from 'os';
 import apiConfig from '../../src/config/api';
+import { exec } from 'child-process-promise';
 
 describe('systemAgentCore', () => {
   let systemAgentCore = null;
@@ -23,8 +24,18 @@ describe('systemAgentCore', () => {
       logger.info(config);
       done()
     } catch (e) {
-      logger.error(e);
+      logger.error(e.message);
       done(e)
+    }
+  });
+
+  it('test exec', async(done) => {
+    try {
+      const data = await exec('ping 192.168.168.1');
+      console.log(data);
+      done();
+    } catch (e) {
+      done(e);
     }
   });
 
@@ -269,7 +280,7 @@ describe('systemAgentCore', () => {
     try {
       const data = {
         email: 'dan826@gmail.com',
-        audio: null,
+        audio: 'C:\\\\Users\\\\trunk\\\\AppData\\\\Roaming\\\\SystemAgent\\\\dan82625@gmail.com_20160618195251.wav',
         video: null,
         cpuBenchmark: 6.94,
         network: {
@@ -306,8 +317,8 @@ describe('systemAgentCore', () => {
       };
       const result = await systemAgentCore.sendReport(
         data,
-        'http://203.75.213.133/PMIT_TEST/api/Report',
-        'http://203.75.213.133/PMIT_TEST/api/UploadFile'
+        'http://203.75.213.133/PMIT_TEST1/api/Report',
+        'http://203.75.213.133/PMIT_TEST1/api/UploadFile'
       );
       done();
     } catch (e) {
